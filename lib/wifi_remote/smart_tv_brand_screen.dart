@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:remote_control/data_source/ir_remotes/lg_signal_codes.dart';
-import 'package:remote_control/data_source/ir_remotes/samsung_signal_codes.dart';
-import 'package:remote_control/data_source/wifi_remotes/samsung_wifi_remote.dart';
+import 'package:remote_control/data_source/ir_remotes/samsung_infrared_remotes.dart';
 import 'package:remote_control/global.dart';
-import 'package:remote_control/infrared/infrared_remote_screen.dart';
 import 'package:remote_control/model/remote_model.dart';
-import 'package:remote_control/wifi/wifi_pre_scan_instruction_screen.dart';
+import 'package:remote_control/wifi_remote/wifi_scan_instruction_screen.dart';
 
-List<SmartTvRemote> allSmartTvRemotes = [samsungSmartRemote];
 
 class SmartTvBrandScreen extends StatelessWidget {
   const SmartTvBrandScreen({super.key});
@@ -47,7 +44,7 @@ class SmartTvBrandScreen extends StatelessWidget {
           Expanded(
             child: ListView.builder(
               shrinkWrap: true,
-              itemCount: allSmartTvRemotes.length,
+              itemCount: null,
               itemBuilder: (context, index) {
                 //  SmartTvRemote = allRemotes[index];
                 return ListTile(

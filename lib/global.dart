@@ -1,13 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-import 'package:remote_control/infrared/signal_emmiter.dart';
+import 'package:remote_control/infrared_remote/signal_emmiter.dart';
 
 const String appName = "Remote Control";
 
 final Color appPurple = Colors.deepPurple.shade300;
 
 final Color remoteButtonColor = Colors.grey.shade900;
+
+List<String> tvIcon = ["blue", "orange", "pink", "purple"];
 
 TextStyle getBoldStyle({
   double fontSize = 25,
@@ -39,6 +41,41 @@ TextStyle _getTextStyle(
       fontFamily: fontFamily,
       // color: color,
       fontWeight: fontWeight);
+}
+
+class CircleButton extends StatelessWidget {
+  const CircleButton(
+      {super.key,
+      required this.color,
+      required this.callback,
+      required this.text,
+      required this.iconData});
+  final Color? color;
+  final VoidCallback callback;
+  final String text;
+  final IconData iconData;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        CircleAvatar(
+          backgroundColor: color,
+          radius: 40,
+          child: IconButton(
+              onPressed: () => callback(),
+              icon: Icon(
+                iconData,
+                size: 40,
+              )),
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        Text(text)
+      ],
+    );
+  }
 }
 
 class FontFamily {

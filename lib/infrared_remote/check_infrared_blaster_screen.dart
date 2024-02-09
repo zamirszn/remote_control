@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:ir_sensor_plugin/ir_sensor_plugin.dart';
 import 'package:remote_control/data_source/local_data_source/app_prefs.dart';
 import 'package:remote_control/global.dart';
-import 'package:remote_control/infrared/infrared_check_success_or_fail_screen.dart';
+import 'package:remote_control/infrared_remote/infrared_check_success_or_fail_screen.dart';
 
 class CheckInfraredBlasterScreen extends StatelessWidget {
   const CheckInfraredBlasterScreen({super.key});

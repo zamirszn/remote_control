@@ -4,17 +4,17 @@ import 'package:remote_control/global.dart';
 import 'package:remote_control/model/remote_model.dart';
 import 'package:remote_control/setup/choose_remote_type.dart';
 import 'package:remote_control/test_screen.dart';
-import 'package:remote_control/infrared/ir_tv_brand_screen.dart';
+import 'package:remote_control/infrared_remote/infrared_tv_brands_screen.dart';
 
-List<MyTvRemote> myTVRemotes = [
-  const MyTvRemote(
-      remoteName: "Samsung",
-      remoteNickName: "My Bedroom TV",
-      remoteImage: "blue"),
-  const MyTvRemote(
-      remoteName: "LG", remoteNickName: "Lounge", remoteImage: "orange"),
-  const MyTvRemote(
-      remoteName: "Sony", remoteNickName: "My Kitchen TV", remoteImage: "pink"),
+List<BaseRemote> myTVRemotes = [
+  // const MyTvRemote(
+  //     remoteName: "Samsung",
+  //     remoteNickName: "My Bedroom TV",
+  //     remoteImage: "blue"),
+  // const MyTvRemote(
+  //     remoteName: "LG", remoteNickName: "Lounge", remoteImage: "orange"),
+  // const MyTvRemote(
+  //     remoteName: "Sony", remoteNickName: "My Kitchen TV", remoteImage: "pink"),
 ];
 
 class MyRemoteScreen extends StatelessWidget {
@@ -38,12 +38,14 @@ class MyRemoteScreen extends StatelessWidget {
         gridDelegate:
             const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
         itemBuilder: (context, index) {
-          MyTvRemote remote = myTVRemotes[index];
-          return MyTVRemoteWidget(
-            remoteImage: "assets/tv_${remote.remoteImage}.webp",
-            remoteName: remote.remoteName,
-            remoteNickName: remote.remoteNickName,
-          );
+          return const SizedBox();
+
+          // MyTvRemote remote = myTVRemotes[index];
+          // return MyTVRemoteWidget(
+          //   remoteImage: "assets/tv_${remote.remoteImage}.webp",
+          //   remoteName: remote.remoteName,
+          //   remoteNickName: remote.remoteNickName,
+          // );
         },
       ),
     );

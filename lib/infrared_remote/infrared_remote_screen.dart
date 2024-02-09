@@ -9,7 +9,7 @@ class InfraredRemoteScreen extends StatelessWidget {
   const InfraredRemoteScreen(
       {super.key, required this.remoteName, required this.remote});
   final String remoteName;
-  final IrTvRemote remote;
+  final InfraredRemote remote;
 
   @override
   Widget build(BuildContext context) {
@@ -99,7 +99,7 @@ class InfraredRemoteScreen extends StatelessWidget {
                       ),
                       ControllerButton(
                         hasBorder: false,
-                        code: remote.volumnMinus,
+                        code: remote.volumeMinus,
                         child: const Icon(
                           Icons.remove,
                           size: 20,

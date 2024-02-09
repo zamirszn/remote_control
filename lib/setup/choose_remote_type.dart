@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:remote_control/data_source/local_data_source/app_prefs.dart';
 import 'package:remote_control/global.dart';
-import 'package:remote_control/infrared/check_infrared_blaster_screen.dart';
-import 'package:remote_control/infrared/ir_tv_brand_screen.dart';
-import 'package:remote_control/wifi/wifi_pre_scan_instruction_screen.dart';
+import 'package:remote_control/infrared_remote/check_infrared_blaster_screen.dart';
+import 'package:remote_control/infrared_remote/infrared_tv_brands_screen.dart';
+import 'package:remote_control/wifi_remote/wifi_scan_instruction_screen.dart';
 
 class ChooseRemoteTypeScreen extends StatelessWidget {
   const ChooseRemoteTypeScreen({super.key});
@@ -28,7 +28,7 @@ class ChooseRemoteTypeScreen extends StatelessWidget {
                 bool hasIR = await appPreferences.hasIR();
                 if (hasIR) {
                   nav.push(MaterialPageRoute(
-                    builder: (context) => const IrTvBrandScreen(),
+                    builder: (context) => const InfraredTvBrandsScreen(),
                   ));
                 } else {
                   nav.push(MaterialPageRoute(

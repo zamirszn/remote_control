@@ -1,7 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:remote_control/global.dart';
-import 'package:remote_control/wifi/wifi_scan_screen.dart';
+import 'package:remote_control/model/connectable_devices.dart';
+import 'package:remote_control/wifi_remote/connectsdk_method_channel.dart';
 
 class WifiPreScanInstructionScreen extends StatefulWidget {
   const WifiPreScanInstructionScreen({super.key});
@@ -13,7 +14,9 @@ class WifiPreScanInstructionScreen extends StatefulWidget {
 
 class _WifiPreScanInstructionScreenState
     extends State<WifiPreScanInstructionScreen> {
-  bool startScanning = false;
+  bool isScanning = false;
+
+  List<ConnectableDeviceModel> listofDevices = [];
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +27,7 @@ class _WifiPreScanInstructionScreenState
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             const RemoteLottie(),
-            if (startScanning == true)
+            if (isScanning == true)
               const Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -37,6 +40,17 @@ class _WifiPreScanInstructionScreenState
                   )
                 ],
               ),
+            if (listofDevices.isNotEmpty)
+              ListView.builder(
+                itemBuilder: (context, index) {
+                  ConnectableDeviceModel connectableDevice =
+                      listofDevices[index];
+                  return ListTile(
+                    title: Text(connectableDevice.friendlyName ?? ""),
+                    subtitle: Text(connectableDevice.ipAddress ?? ""),
+                  );
+                },
+              ),
             const SizedBox(
               height: 20,
             ),
@@ -44,10 +58,11 @@ class _WifiPreScanInstructionScreenState
             const SizedBox(
               height: 20,
             ),
-            if (startScanning == false)
+            if (isScanning == false)
               ElevatedButton(
                   onPressed: () {
-                    startScanning = true;
+                    isScanning = true;
+                    initConnectSdk();
                     setState(() {});
                   },
                   child: const Text("Ready"))
@@ -55,6 +70,14 @@ class _WifiPreScanInstructionScreenState
         ),
       ),
     );
+  }
+
+  void initConnectSdk() async {
+    ConnectSdkMethodChannel connectSdkMethodChannel = ConnectSdkMethodChannel();
+    await connectSdkMethodChannel.initialize();
+
+    listofDevices = await connectSdkMethodChannel.getAvailableDevices();
+    isScanning = false;
   }
 }
 

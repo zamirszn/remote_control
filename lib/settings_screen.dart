@@ -36,7 +36,7 @@ class _SettingScreenState extends State<SettingScreen> {
               "Share",
             ),
             leading: Icon(Icons.share),
-            subtitle: Text("Share TV Rem"),
+            subtitle: Text("Share this app"),
           ),
           ListTile(
             title: Text(

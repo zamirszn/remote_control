@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:remote_control/global.dart';
-import 'package:remote_control/infrared/ir_tv_brand_screen.dart';
+import 'package:remote_control/infrared_remote/infrared_tv_brands_screen.dart';
 
 class InfraredCheckSucessDialog extends StatelessWidget {
   const InfraredCheckSucessDialog({super.key});
@@ -26,7 +26,7 @@ class InfraredCheckSucessDialog extends StatelessWidget {
             onPressed: () => Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const IrTvBrandScreen(),
+                  builder: (context) => const InfraredTvBrandsScreen(),
                 )),
             child: const Text("Continue"))
       ]),

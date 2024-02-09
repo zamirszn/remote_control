@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:remote_control/global.dart';
-import 'package:remote_control/infrared/signal_emmiter.dart';
+import 'package:remote_control/infrared_remote/signal_emmiter.dart';
 
 class ControllerButton extends StatelessWidget {
   final Widget? child;
