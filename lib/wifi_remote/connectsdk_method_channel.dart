@@ -8,7 +8,7 @@ class ConnectSdkMethodChannel {
 
   Future<void> initialize() async {
     try {
-      await _channel.invokeMethod('initialize');
+      bool isInitialized =await _channel.invokeMethod('initialize');
     } catch (e) {
       print('Error connecting to device: $e');
     }

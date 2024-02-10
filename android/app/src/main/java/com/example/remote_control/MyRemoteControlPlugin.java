@@ -1,3 +1,5 @@
+package com.example.remote_control;
+
 import android.content.Context;
 import com.connectsdk.device.ConnectableDevice;
 import com.connectsdk.device.ConnectableDeviceListener;
@@ -12,18 +14,59 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
 
+import androidx.annotation.NonNull;
 
-public class MyRemoteControlPlugin implements ConnectableDeviceListener {
+import io.flutter.embedding.engine.plugins.FlutterPlugin;
+import io.flutter.plugin.common.MethodCall;
+import io.flutter.plugin.common.MethodChannel;
+import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
+import io.flutter.plugin.common.MethodChannel.Result;
+
+
+public class MyRemoteControlPlugin implements ConnectableDeviceListener, FlutterPlugin, MethodCallHandler {
 
     private ConnectableDevice mTV;
+    private MethodChannel channel;
+    private Context pluginContext; 
 
-    // Method invoked from Flutter to initialize Connect SDK and start device discovery
-    public void initialize(Context context) {
+
+    @Override
+    public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
+        channel = new MethodChannel(flutterPluginBinding.getBinaryMessenger(), "connectsdkMethodChannel");
+        channel.setMethodCallHandler(this);
+
+        pluginContext = flutterPluginBinding.getApplicationContext();
+    }
+
+    public boolean initialize(Context context) {
         DiscoveryManager.init(context);
         DiscoveryManager.getInstance().registerDefaultDeviceTypes();
         DiscoveryManager.getInstance().setPairingLevel(PairingLevel.ON);
         DiscoveryManager.getInstance().start();
+        return true; 
+        }
+
+    @Override
+    public void onMethodCall(@NonNull MethodCall call, @NonNull Result result) {
+        switch (call.method){
+            case "initialize":
+                result.success(initialize(pluginContext));
+             break;
+         default:
+            throw new IllegalArgumentException("Unknown method " + call.method);
+        }
     }
+
+     @Override
+    public void onDetachedFromEngine(@NonNull FlutterPluginBinding binding) {
+        channel.setMethodCallHandler(null);
+    }
+
+
+
+
+    // Method invoked from Flutter to initialize Connect SDK and start device discovery
+    
 
     
     public void onDeviceAdded(DiscoveryManager manager, ConnectableDevice device) {

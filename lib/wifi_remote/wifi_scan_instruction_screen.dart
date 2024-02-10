@@ -61,7 +61,7 @@ class _WifiPreScanInstructionScreenState
             if (isScanning == false)
               ElevatedButton(
                   onPressed: () {
-                    isScanning = true;
+                    // isScanning = true;
                     initConnectSdk();
                     setState(() {});
                   },
