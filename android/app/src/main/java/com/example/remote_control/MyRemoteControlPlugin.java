@@ -17,11 +17,12 @@ import java.util.HashMap;
 import androidx.annotation.NonNull;
 
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
+import io.flutter.embedding.engine.FlutterEngine;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
 import io.flutter.plugin.common.MethodChannel.Result;
-
+import android.util.Log;
 
 public class MyRemoteControlPlugin implements ConnectableDeviceListener, FlutterPlugin, MethodCallHandler {
 
@@ -29,12 +30,17 @@ public class MyRemoteControlPlugin implements ConnectableDeviceListener, Flutter
     private MethodChannel channel;
     private Context pluginContext; 
 
+    public void attachToEngine(Context context, FlutterEngine flutterEngine) {
+        Log.d("MyRemoteControlPlugin", "attachToEngine");
+        channel = new MethodChannel(flutterEngine.getDartExecutor().getBinaryMessenger(), "connectsdkMethodChannel");
+        channel.setMethodCallHandler(this);
+        pluginContext = context;
+        Log.d("MyRemoteControlPlugin", "attachToEngine: success");
+    }
 
     @Override
     public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
-        channel = new MethodChannel(flutterPluginBinding.getBinaryMessenger(), "connectsdkMethodChannel");
-        channel.setMethodCallHandler(this);
-
+        Log.d("MyRemoteControlPlugin", "onAttachedToEngine");
         pluginContext = flutterPluginBinding.getApplicationContext();
     }
 
@@ -52,6 +58,9 @@ public class MyRemoteControlPlugin implements ConnectableDeviceListener, Flutter
             case "initialize":
                 result.success(initialize(pluginContext));
              break;
+             case "getAvailableDevices":
+                result.success(getAvailableDevices());
+            break;
          default:
             throw new IllegalArgumentException("Unknown method " + call.method);
         }
