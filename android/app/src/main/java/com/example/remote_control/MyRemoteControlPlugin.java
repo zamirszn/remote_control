@@ -17,11 +17,12 @@ import java.util.HashMap;
 import androidx.annotation.NonNull;
 
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
+import io.flutter.embedding.engine.FlutterEngine;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
 import io.flutter.plugin.common.MethodChannel.Result;
-
+import android.util.Log;
 
 public class MyRemoteControlPlugin implements ConnectableDeviceListener, FlutterPlugin, MethodCallHandler {
 
@@ -29,12 +30,17 @@ public class MyRemoteControlPlugin implements ConnectableDeviceListener, Flutter
     private MethodChannel channel;
     private Context pluginContext; 
 
+    public void attachToEngine(Context context, FlutterEngine flutterEngine) {
+        Log.d("MyRemoteControlPlugin", "attachToEngine");
+        channel = new MethodChannel(flutterEngine.getDartExecutor().getBinaryMessenger(), "connectsdkMethodChannel");
+        channel.setMethodCallHandler(this);
+        pluginContext = context;
+        Log.d("MyRemoteControlPlugin", "attachToEngine: success");
+    }
 
     @Override
     public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
-        channel = new MethodChannel(flutterPluginBinding.getBinaryMessenger(), "connectsdkMethodChannel");
-        channel.setMethodCallHandler(this);
-
+        Log.d("MyRemoteControlPlugin", "onAttachedToEngine");
         pluginContext = flutterPluginBinding.getApplicationContext();
     }
 
@@ -43,8 +49,15 @@ public class MyRemoteControlPlugin implements ConnectableDeviceListener, Flutter
         DiscoveryManager.getInstance().registerDefaultDeviceTypes();
         DiscoveryManager.getInstance().setPairingLevel(PairingLevel.ON);
         DiscoveryManager.getInstance().start();
+        
         return true; 
         }
+
+
+    public void pairAlertDialog(){
+
+    }
+    public void pairCodeDialog(){}
 
     @Override
     public void onMethodCall(@NonNull MethodCall call, @NonNull Result result) {
@@ -52,6 +65,14 @@ public class MyRemoteControlPlugin implements ConnectableDeviceListener, Flutter
             case "initialize":
                 result.success(initialize(pluginContext));
              break;
+            case "getAvailableDevices":
+                result.success(getAvailableDevices());
+            break;
+            case "connectToDevice":
+                String deviceId = call.argument("deviceId");
+                connectToDevice(deviceId);
+                result.success(null); 
+                break;
          default:
             throw new IllegalArgumentException("Unknown method " + call.method);
         }
@@ -108,19 +129,44 @@ public class MyRemoteControlPlugin implements ConnectableDeviceListener, Flutter
         // Handle capability updated
     }
 
+
     
-    public void onPairingRequired(ConnectableDevice device, DeviceService service, PairingType pairingType) {
-        // Handle pairing required
-    }
+
+    
+     @Override
+        public void onPairingRequired(ConnectableDevice device, DeviceService service, PairingType pairingType) {
+
+            switch (pairingType) { 
 
 
-    public void connectToDevice(String deviceId) {
-        ConnectableDevice device = DiscoveryManager.getInstance().getCompatibleDevices().get(deviceId);
-        if (device != null) {
-            device.addListener(this);
-            device.connect();
+                case FIRST_SCREEN:
+                    Log.d("Conected", "alert pairing");
+                    pairAlertDialog();
+                    break;
+
+                case PIN_CODE:
+                case MIXED:
+                    Log.d("Connected", "pin code pairing");
+                    pairCodeDialog();
+                    break;
+
+                case NONE:
+                default:
+                    break;
+            }
         }
+
+
+   public boolean connectToDevice(String deviceId) {
+    ConnectableDevice device = DiscoveryManager.getInstance().getCompatibleDevices().get(deviceId);
+    if (device != null) {
+        device.addListener(this);
+        device.connect();
+        return true;
+    } else {
+        return false;
     }
+}
 
 
     public List<Map<String, Object>> getAvailableDevices() {

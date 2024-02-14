@@ -1,6 +1,10 @@
+import 'dart:html';
+
 import 'package:flutter/material.dart';
+import 'package:remote_control/data_source/local_data_source/storage.dart';
 import 'package:remote_control/global.dart';
 import 'package:remote_control/model/remote_model.dart';
+import 'package:remote_control/model/saved_remote_model.dart';
 import 'package:remote_control/my_remote/my_remote_screen.dart';
 
 class SaveInfraredRemoteScreen extends StatefulWidget {
@@ -191,8 +195,19 @@ class _SaveInfraredRemoteScreenState extends State<SaveInfraredRemoteScreen> {
   }
 
   void saveRemoteToStorage() {
-    String remoteName = tvNameTextEditingController.text;
+    showLoadingDialog("Saving Remote", context);
+    String customName = tvNameTextEditingController.text;
     String icon = tvIcon[selectedTVIconIndex];
     Map<String, dynamic> remote = widget.remote.toJson();
+
+    SavedRemoteModel saveRemoteObj = SavedRemoteModel(
+      icon: icon,
+      remote: remote,
+      customName: customName,
+      type: "ir",
+    );
+
+    // Storage().saveRemote(saveRemoteObj);
   }
+
 }

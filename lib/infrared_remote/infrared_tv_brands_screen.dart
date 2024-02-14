@@ -1,22 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:remote_control/data_source/ir_remotes/lg_signal_codes.dart';
-import 'package:remote_control/data_source/ir_remotes/samsung_infrared_remotes.dart';
+import 'package:remote_control/data_source/ir_remotes/lg.dart';
 import 'package:remote_control/global.dart';
+import 'package:remote_control/infrared_remote/all_infrared_tv_brands.dart';
 import 'package:remote_control/infrared_remote/found_remote_screen.dart';
 import 'package:remote_control/infrared_remote/infrared_remote_screen.dart';
 import 'package:remote_control/infrared_remote/infrared_remote_test_screen.dart';
 import 'package:remote_control/model/brands.dart';
 import 'package:remote_control/model/remote_model.dart';
 
-List<RemoteBrand> allIRRemoteBrands = [
-  RemoteBrand(brandName: "Samsung", infraredRemotes: [
-    samsungIRRemote1,
-    samsungIRRemote2,
-  ]),
-  RemoteBrand(brandName: "LG", infraredRemotes: [
-    lgIRRemote1,
-  ]),
-];
+
 
 class InfraredTvBrandsScreen extends StatelessWidget {
   const InfraredTvBrandsScreen({super.key});

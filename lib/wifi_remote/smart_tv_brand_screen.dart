@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:remote_control/data_source/ir_remotes/lg_signal_codes.dart';
-import 'package:remote_control/data_source/ir_remotes/samsung_infrared_remotes.dart';
+import 'package:remote_control/data_source/ir_remotes/lg.dart';
 import 'package:remote_control/global.dart';
 import 'package:remote_control/model/remote_model.dart';
 import 'package:remote_control/wifi_remote/wifi_scan_instruction_screen.dart';

@@ -8,30 +8,49 @@ class ConnectSdkMethodChannel {
 
   Future<void> initialize() async {
     try {
-      bool isInitialized =await _channel.invokeMethod('initialize');
+      bool isInitialized = await _channel.invokeMethod('initialize');
+      print(isInitialized);
     } catch (e) {
       print('Error connecting to device: $e');
     }
   }
 
+
+  Future<void> onPairingRequired()async{
+    
+  }
+
   Future<List<ConnectableDeviceModel>> getAvailableDevices() async {
     try {
-      final List<dynamic> devices =
-          await _channel.invokeMethod('getAvailableDevices');
-      return devices
-          .map((device) => ConnectableDeviceModel.fromJson(device))
-          .toList();
+      // final List<dynamic> devices =
+      //     await _channel.invokeMethod('getAvailableDevices');
+
+      List<ConnectableDeviceModel> devices = [
+        ConnectableDeviceModel(
+          friendlyName: "KD-49X88308C",
+          id: "9223372036854775807",
+          modelName: "BRAVIA 4K 2015",
+          ipAddress: "192.168.1.171",
+        ),
+      ];
+
+      return devices;
+      // return devices
+      //     .map((device) => ConnectableDeviceModel.fromJson(device))
+      //     .toList();
     } on PlatformException catch (e) {
       print("Error: ${e.message}");
       return [];
     }
   }
 
-  Future<void> connectToDevice(String deviceId) async {
+  Future<bool> connectToDevice(String deviceId) async {
     try {
-      await _channel.invokeMethod('connectToDevice', {'deviceId': deviceId});
-    } on PlatformException catch (e) {
-      print("Error: ${e.message}");
+      bool isConnected = await _channel
+          .invokeMethod('connectToDevice', {'deviceId': deviceId});
+      return isConnected;
+    }  catch (e) {
+      return false;
     }
   }
 }

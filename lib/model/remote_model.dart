@@ -1,12 +1,9 @@
-
-
 class BaseRemote {
   String brand;
   BaseRemote({required this.brand});
 }
 
 class InfraredRemote extends BaseRemote {
-  String? customName;
   String? power;
   String? one;
   String? mute;
@@ -34,7 +31,6 @@ class InfraredRemote extends BaseRemote {
   String? menu;
 
   InfraredRemote({
-    required this.customName,
     required this.power,
     required this.one,
     required this.mute,
@@ -65,7 +61,6 @@ class InfraredRemote extends BaseRemote {
 
   factory InfraredRemote.fromJson(Map<String, dynamic> json) {
     return InfraredRemote(
-      customName: json['remoteName'],
       power: json['power'],
       one: json['one'],
       mute: json['mute'],
@@ -97,7 +92,6 @@ class InfraredRemote extends BaseRemote {
 
   Map<String, dynamic> toJson() {
     return {
-      'remoteName': customName,
       'power': power,
       'one': one,
       'mute': mute,

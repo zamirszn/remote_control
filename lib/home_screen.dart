@@ -38,7 +38,7 @@ class _HomeScreenState extends State<HomeScreen> {
 List<Widget> homeScreens = [
   const MyRemoteScreen(),
   Container(
-    child: const Center(child: Text("2")),
+    child: const Center(child: Text("Cast Screen")),
   ),
   SettingScreen(),
 ];

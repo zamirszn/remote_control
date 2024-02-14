@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:remote_control/global.dart';
 import 'package:remote_control/model/connectable_devices.dart';
 import 'package:remote_control/wifi_remote/connectsdk_method_channel.dart';
+import 'package:remote_control/wifi_remote/wifi_remote_screen.dart';
 
 class WifiPreScanInstructionScreen extends StatefulWidget {
   const WifiPreScanInstructionScreen({super.key});
@@ -17,6 +18,7 @@ class _WifiPreScanInstructionScreenState
   bool isScanning = false;
 
   List<ConnectableDeviceModel> listofDevices = [];
+  ConnectSdkMethodChannel connectSdkMethodChannel = ConnectSdkMethodChannel();
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +28,7 @@ class _WifiPreScanInstructionScreenState
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const RemoteLottie(),
+            if (listofDevices.isEmpty) const RemoteLottie(),
             if (isScanning == true)
               const Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -41,24 +43,47 @@ class _WifiPreScanInstructionScreenState
                 ],
               ),
             if (listofDevices.isNotEmpty)
-              ListView.builder(
-                itemBuilder: (context, index) {
-                  ConnectableDeviceModel connectableDevice =
-                      listofDevices[index];
-                  return ListTile(
-                    title: Text(connectableDevice.friendlyName ?? ""),
-                    subtitle: Text(connectableDevice.ipAddress ?? ""),
-                  );
-                },
+              const Column(
+                children: [
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Text("Found Devices"),
+                ],
+              ),
+            if (listofDevices.isNotEmpty)
+              SizedBox(
+                height: MediaQuery.of(context).size.height / 1.15,
+                child: ListView.builder(
+                  physics: const BouncingScrollPhysics(),
+                  shrinkWrap: true,
+                  itemCount: listofDevices.length,
+                  itemBuilder: (context, index) {
+                    ConnectableDeviceModel connectableDevice =
+                        listofDevices[index];
+                    return ListTile(
+                      leading: const Icon(Icons.tv),
+                      onTap: () {
+                        if (connectableDevice.id != null) {
+                          connectToDevice(connectableDevice.id!);
+                        }
+                      },
+                      title: Text(
+                          "${connectableDevice.modelName ?? ""} - ${connectableDevice.friendlyName ?? ""} "),
+                      subtitle: Text(connectableDevice.ipAddress ?? ""),
+                    );
+                  },
+                ),
               ),
             const SizedBox(
               height: 20,
             ),
-            const WifiInstructionWidget(),
+            if (isScanning == false && listofDevices.isEmpty)
+              const WifiInstructionWidget(),
             const SizedBox(
               height: 20,
             ),
-            if (isScanning == false)
+            if (isScanning == false && listofDevices.isEmpty)
               ElevatedButton(
                   onPressed: () {
                     // isScanning = true;
@@ -72,12 +97,27 @@ class _WifiPreScanInstructionScreenState
     );
   }
 
+  void connectToDevice(String deviceId) async {
+    showLoadingDialog("Connecting please wait", context);
+    bool isDevicesConnected =
+        await connectSdkMethodChannel.connectToDevice(deviceId);
+    Navigator.pop(context);
+
+    if (isDevicesConnected) {}
+
+    Navigator.push(context,
+        MaterialPageRoute(builder: (context) => const WifiRemoteScreen()));
+  }
+
   void initConnectSdk() async {
-    ConnectSdkMethodChannel connectSdkMethodChannel = ConnectSdkMethodChannel();
+    isScanning = false;
+    setState(() {});
     await connectSdkMethodChannel.initialize();
 
-    listofDevices = await connectSdkMethodChannel.getAvailableDevices();
-    isScanning = false;
+    await connectSdkMethodChannel.getAvailableDevices().then((value) {
+      listofDevices = value;
+      setState(() {});
+    });
   }
 }
 

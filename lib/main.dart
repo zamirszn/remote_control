@@ -5,7 +5,7 @@ import 'package:remote_control/home_screen.dart';
 import 'package:remote_control/my_remote/my_remote_screen.dart';
 import 'package:remote_control/setup/setup_screen.dart';
 
-void main() {
+void main() async {
   runApp(const RemoteControlApp());
 }
 
