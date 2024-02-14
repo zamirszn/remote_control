@@ -18,6 +18,7 @@ import androidx.annotation.NonNull;
 
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
 import io.flutter.embedding.engine.FlutterEngine;
+import io.flutter.embedding.engine.FlutterEngine;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
@@ -37,9 +38,17 @@ public class MyRemoteControlPlugin implements ConnectableDeviceListener, Flutter
         pluginContext = context;
         Log.d("MyRemoteControlPlugin", "attachToEngine: success");
     }
+    public void attachToEngine(Context context, FlutterEngine flutterEngine) {
+        Log.d("MyRemoteControlPlugin", "attachToEngine");
+        channel = new MethodChannel(flutterEngine.getDartExecutor().getBinaryMessenger(), "connectsdkMethodChannel");
+        channel.setMethodCallHandler(this);
+        pluginContext = context;
+        Log.d("MyRemoteControlPlugin", "attachToEngine: success");
+    }
 
     @Override
     public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
+        Log.d("MyRemoteControlPlugin", "onAttachedToEngine");
         Log.d("MyRemoteControlPlugin", "onAttachedToEngine");
         pluginContext = flutterPluginBinding.getApplicationContext();
     }
