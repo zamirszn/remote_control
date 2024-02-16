@@ -1,7 +1,4 @@
-class BaseRemote {
-  String brand;
-  BaseRemote({required this.brand});
-}
+class BaseRemote {}
 
 class InfraredRemote extends BaseRemote {
   String? power;
@@ -55,38 +52,36 @@ class InfraredRemote extends BaseRemote {
     required this.exit,
     required this.home,
     required this.info,
-    required super.brand,
     required this.menu,
   });
 
   factory InfraredRemote.fromJson(Map<String, dynamic> json) {
     return InfraredRemote(
-      power: json['power'],
-      one: json['one'],
-      mute: json['mute'],
-      two: json['two'],
-      three: json['three'],
-      four: json['four'],
-      five: json['five'],
-      six: json['six'],
-      seven: json['seven'],
-      eight: json['eight'],
-      nine: json['nine'],
-      zero: json['zero'],
-      enter: json['enter'],
-      channelPlus: json['channelPlus'],
-      channelMinus: json['channelMinus'],
-      volumePlus: json['volumePlus'],
-      volumeMinus: json['volumeMinus'],
-      up: json['up'],
-      down: json['down'],
-      left: json['left'],
-      right: json['right'],
-      exit: json['exit'],
-      home: json['home'],
-      info: json['info'],
-      brand: json['brand'],
-      menu: json['menu'],
+      power: json['power'] ?? "",
+      one: json['one'] ?? "",
+      mute: json['mute'] ?? "",
+      two: json['two'] ?? "",
+      three: json['three'] ?? "",
+      four: json['four'] ?? "",
+      five: json['five'] ?? "",
+      six: json['six'] ?? "",
+      seven: json['seven'] ?? "",
+      eight: json['eight'] ?? "",
+      nine: json['nine'] ?? "",
+      zero: json['zero'] ?? "",
+      enter: json['enter'] ?? "",
+      channelPlus: json['channelPlus'] ?? "",
+      channelMinus: json['channelMinus'] ?? "",
+      volumePlus: json['volumePlus'] ?? "",
+      volumeMinus: json['volumeMinus'] ?? "",
+      up: json['up'] ?? "",
+      down: json['down'] ?? "",
+      left: json['left'] ?? "",
+      right: json['right'] ?? "",
+      exit: json['exit'] ?? "",
+      home: json['home'] ?? "",
+      info: json['info'] ?? "",
+      menu: json['menu'] ?? "",
     );
   }
 
@@ -126,14 +121,12 @@ class WifiRemote extends BaseRemote {
   String someWifiProperty;
 
   WifiRemote({
-    required super.brand,
     required this.customName,
     required this.someWifiProperty,
   });
 
   factory WifiRemote.fromJson(Map<String, dynamic> json) {
     return WifiRemote(
-      brand: json['brand'],
       customName: json['customName'],
       someWifiProperty: json['someWifiProperty'],
     );
@@ -141,7 +134,6 @@ class WifiRemote extends BaseRemote {
 
   Map<String, dynamic> toJson() {
     return {
-      'brand': brand,
       'customName': customName,
       'someWifiProperty': someWifiProperty,
     };

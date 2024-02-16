@@ -1,3 +1,4 @@
+import 'package:remote_control/global.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AppPreferences {
@@ -13,12 +14,22 @@ class AppPreferences {
 
   Future<bool> hasIR() async {
     final sharedPref = await SharedPreferences.getInstance();
-    return sharedPref.getBool("ir") ?? false;
+    return sharedPref.getBool(ir) ?? false;
   }
 
   Future<void> setIrTrue() async {
     final sharedPref = await SharedPreferences.getInstance();
-    sharedPref.setBool("ir", true);
+    sharedPref.setBool(ir, true);
+  }
+
+  Future<bool> getVibration() async {
+    final sharedPref = await SharedPreferences.getInstance();
+    return sharedPref.getBool("vibration") ?? true;
+  }
+
+  Future<void> setVibration(bool value) async {
+    final sharedPref = await SharedPreferences.getInstance();
+    sharedPref.setBool("vibration", value);
   }
 }
 

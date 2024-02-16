@@ -1,15 +1,45 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:remote_control/data_source/local_data_source/app_prefs.dart';
 import 'package:remote_control/infrared_remote/signal_emmiter.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 const String appName = "Remote Control";
+const String edit = "Edit";
+const String delete = "Delete";
+const String ir = "ir";
 
 final Color appPurple = Colors.deepPurple.shade300;
 
 final Color remoteButtonColor = Colors.grey.shade900;
 
 List<String> tvIcon = ["blue", "orange", "pink", "purple"];
+
+bool vibrationValue = true;
+
+void toggleVibrationSwitch(bool value) async {
+  await appPreferences.setVibration(value);
+}
+
+const String supportEmail = "sample@mail.com";
+
+void sendFeedbackEmail({
+  required String subject,
+  required String body,
+}) async {
+  final Uri emailUri = Uri(
+    scheme: 'mailto',
+    path: supportEmail,
+    query: "mailto:$supportEmail?subject=$subject&body=$body",
+  );
+
+  if (await canLaunchUrl(emailUri)) {
+    await launchUrl(emailUri);
+  } else {
+    throw 'Could not launch email';
+  }
+}
 
 TextStyle getBoldStyle({
   double fontSize = 25,
@@ -87,7 +117,12 @@ class RemoteLottie extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Lottie.asset("assets/remote_control.json");
+    bool isDarkMode =
+        MediaQuery.of(context).platformBrightness == Brightness.dark;
+
+    return
+    isDarkMode?  Lottie.asset("assets/remote_control_dark.json"):
+     Lottie.asset("assets/remote_control.json");
   }
 }
 

@@ -1,7 +1,6 @@
 import 'package:remote_control/model/remote_model.dart';
 
 InfraredRemote asusIRRemote1 = InfraredRemote(
-  brand: "CCE",
   channelMinus:
       "0000 0073 0000 000C 0020 0020 0020 0020 0040 0020 0020 0020 0020 0020 0020 0020 0020 0040 0040 0020 0020 0020 0020 0020 0020 0040 0020 0CA8",
   channelPlus:

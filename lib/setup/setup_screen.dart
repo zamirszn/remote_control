@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:remote_control/data_source/local_data_source/app_prefs.dart';
 import 'package:remote_control/global.dart';
+import 'package:remote_control/setup/choose_remote_type.dart';
 import 'package:remote_control/setup/select_language_screen.dart';
 import 'package:remote_control/test_screen.dart';
 
@@ -41,8 +43,12 @@ class SetupScreen extends StatelessWidget {
             ),
             ElevatedButton(
               onPressed: () {
+                // Navigator.of(context).push(MaterialPageRoute(
+                //   builder: (context) => const SelectLanguageScreen(),
+                // ));
+                appPreferences.setupCompleted();
                 Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => const SelectLanguageScreen(),
+                  builder: (context) => const ChooseRemoteTypeScreen(),
                 ));
               },
               child: const Text("Start Now"),

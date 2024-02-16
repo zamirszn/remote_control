@@ -29,7 +29,7 @@ class InfraredControllerButton extends StatelessWidget {
             borderRadius: BorderRadius.circular(10),
           ),
           onTap: () {
-            if (code != null) {
+            if (code != null && code!.isNotEmpty) {
               sendInfraredSignal(code!, context);
             }
           },

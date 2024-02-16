@@ -3,9 +3,8 @@ import 'package:remote_control/global.dart';
 import 'package:vibration/vibration.dart';
 
 void sendInfraredSignal(String code, context) async {
-  if (code.isEmpty) return;
   bool? deviceHasVibrator = await Vibration.hasVibrator();
-  if (deviceHasVibrator == true) {
+  if (deviceHasVibrator == true && vibrationValue == true) {
     Vibration.vibrate(duration: 20);
   }
   try {

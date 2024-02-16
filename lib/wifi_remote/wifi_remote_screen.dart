@@ -24,7 +24,7 @@ class WifiRemoteScreen extends StatelessWidget {
         body: TabBarView(children: [
           WifiRemoteWidget(
             remote:
-                WifiRemote(brand: "", customName: "", someWifiProperty: ""),
+                WifiRemote( customName: "", someWifiProperty: ""),
           ),
           const Center(
             child: Text("1"),
