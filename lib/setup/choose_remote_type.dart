@@ -55,9 +55,9 @@ class ChooseRemoteTypeScreen extends StatelessWidget {
               remoteTypeInformation:
                   "Your device and TV need to be on the same WiFI network",
             ),
-            ElevatedButton(
-                onPressed: () {},
-                child: const Text("Don't know which to select?"))
+            const SizedBox(
+              height: 20,
+            ),
           ],
         ),
       ),

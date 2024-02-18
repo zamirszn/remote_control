@@ -121,8 +121,14 @@ class RemoteLottie extends StatelessWidget {
         MediaQuery.of(context).platformBrightness == Brightness.dark;
 
     return
-    isDarkMode?  Lottie.asset("assets/remote_control_dark.json"):
-     Lottie.asset("assets/remote_control.json");
+        // isDarkMode?  Padding(
+        //   padding: const EdgeInsets.all(8.0),
+        //   child: Lottie.asset("assets/tv_dark.json",),
+        // ):
+        Lottie.asset(
+      "assets/remote_control.json",
+      
+    );
   }
 }
 
