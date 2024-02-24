@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:remote_control/global.dart';
 import 'package:remote_control/infrared_remote/signal_emmiter.dart';
+import 'package:remote_control/wifi_remote/connectsdk_method_channel.dart';
 
 class InfraredControllerButton extends StatelessWidget {
   final Widget? child;
@@ -69,7 +70,10 @@ class WifiControllerButton extends StatelessWidget {
             borderRadius: BorderRadius.circular(10),
           ),
           onTap: () {
-            if (code != null) {}
+            if (code != null && code!.isNotEmpty) {
+              connectSdkMethodChannel.sendTVCommand(command: code!);
+             
+            }
           },
           child: Container(
             padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),

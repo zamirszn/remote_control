@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:remote_control/global.dart';
@@ -18,7 +20,6 @@ class _WifiPreScanInstructionScreenState
   bool isScanning = false;
 
   List<ConnectableDeviceModel> listofDevices = [];
-  ConnectSdkMethodChannel connectSdkMethodChannel = ConnectSdkMethodChannel();
 
   @override
   Widget build(BuildContext context) {
@@ -64,8 +65,8 @@ class _WifiPreScanInstructionScreenState
                     return ListTile(
                       leading: const Icon(Icons.tv),
                       onTap: () {
-                        if (connectableDevice.id != null) {
-                          connectToDevice(connectableDevice.id!);
+                        if (connectableDevice.ipAddress != null) {
+                          connectToDevice(connectableDevice.ipAddress!);
                         }
                       },
                       title: Text(
@@ -87,8 +88,12 @@ class _WifiPreScanInstructionScreenState
               ElevatedButton(
                   onPressed: () {
                     // isScanning = true;
-                    initConnectSdk();
-                    setState(() {});
+                    // initConnectSdk();
+                    // setState(() {});
+
+                    Navigator.push(context,
+          MaterialPageRoute(builder: (context) => const WifiRemoteScreen()));
+    
                   },
                   child: const Text("Ready"))
           ],
@@ -101,13 +106,24 @@ class _WifiPreScanInstructionScreenState
     showLoadingDialog("Connecting please wait", context);
     bool isDevicesConnected =
         await connectSdkMethodChannel.connectToDevice(deviceId);
+
     Navigator.pop(context);
 
-    if (isDevicesConnected) {}
+    if (isDevicesConnected) {
+      timer?.cancel();
 
-    Navigator.push(context,
-        MaterialPageRoute(builder: (context) => const WifiRemoteScreen()));
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => const WifiRemoteScreen()));
+    }
   }
+
+  @override
+  void dispose() {
+    timer?.cancel();
+    super.dispose();
+  }
+
+  Timer? timer;
 
   void initConnectSdk() async {
     isScanning = false;
@@ -116,7 +132,19 @@ class _WifiPreScanInstructionScreenState
 
     await connectSdkMethodChannel.getAvailableDevices().then((value) {
       listofDevices = value;
+
       setState(() {});
+    });
+
+  
+
+// periodically scan every 2 seconds
+   timer= Timer.periodic(const Duration(seconds: 2), (timer) async {
+      await connectSdkMethodChannel.getAvailableDevices().then((value) {
+        listofDevices = value;
+
+        setState(() {});
+      });
     });
   }
 }

@@ -8,33 +8,45 @@ class WifiRemoteScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 3,
-      child: Scaffold(
-        appBar: AppBar(
-          bottom: const TabBar(
-              tabAlignment: TabAlignment.center,
-              isScrollable: true,
-              tabs: [
-                Tab(icon: Icon(Icons.settings_remote), text: "Remote"),
-                Tab(icon: Icon(Icons.touch_app), text: "Trackpad"),
-                Tab(icon: Icon(Icons.apps_rounded), text: "Apps"),
-              ]),
-        ),
-        body: TabBarView(children: [
-          WifiRemoteWidget(
-            remote:
-                WifiRemote( customName: "", someWifiProperty: ""),
-          ),
-          const Center(
-            child: Text("1"),
-          ),
-          const Center(
-            child: Text("1"),
-          ),
-        ]),
-      ),
-    );
+    return Scaffold(
+        appBar: AppBar(title: const Text("Wifi Remote")),
+        body: WifiRemoteWidget(
+          remote: WifiRemote(customName: "", someWifiProperty: ""),
+        ));
+
+    //   DefaultTabController(
+    //     length: 3,
+    //     child: Scaffold(
+    //       appBar: AppBar(
+    //         bottom: const TabBar(
+    //             tabAlignment: TabAlignment.center,
+    //             isScrollable: true,
+
+    //             tabs: [
+    //               Tab(
+    //                 text: "Remote",
+    //               ),
+    //               Tab(
+    //                 text: "Trackpad",
+    //               ),
+    //               Tab(
+    //                 text: "Apps",
+    //               ),
+    //             ]),
+    //       ),
+    //       body: TabBarView(children: [
+    //         WifiRemoteWidget(
+    //           remote: WifiRemote(customName: "", someWifiProperty: ""),
+    //         ),
+    //         const Center(
+    //           child: Text("2"),
+    //         ),
+    //         const Center(
+    //           child: Text("1"),
+    //         ),
+    //       ]),
+    //     ),
+    //   );
   }
 }
 
@@ -55,19 +67,25 @@ class WifiRemoteWidget extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           // power
-          const Row(
+          Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              WifiControllerButton(
-                code: null,
+              const WifiControllerButton(
+                code: "power_off",
                 child: Icon(
                   Icons.power_settings_new_rounded,
                   size: 20,
                 ),
               ),
-              WifiControllerButton(
-                code: null,
-                child: Text("123"),
+              GestureDetector(
+                onTap: () => showNumberPadBottomSheet(context),
+                child: const AbsorbPointer(
+                  absorbing: true,
+                  child: WifiControllerButton(
+                    code: null,
+                    child: Text("123"),
+                  ),
+                ),
               ),
             ],
           ),
@@ -75,8 +93,8 @@ class WifiRemoteWidget extends StatelessWidget {
           const Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              WifiControllerButton(code: null, child: Text("HELP")),
-              WifiControllerButton(code: null, child: Text("OPTION")),
+              WifiControllerButton(code: "home", child: Text("HOME")),
+              WifiControllerButton(code: "back", child: Text("RETURN")),
             ],
           ),
           // volume
@@ -94,7 +112,7 @@ class WifiRemoteWidget extends StatelessWidget {
               children: [
                 WifiControllerButton(
                   hasBorder: false,
-                  code: null,
+                  code: "go_up",
                   child: Icon(
                     Icons.keyboard_arrow_up_rounded,
                     size: 20,
@@ -106,14 +124,14 @@ class WifiRemoteWidget extends StatelessWidget {
                   children: [
                     WifiControllerButton(
                       hasBorder: false,
-                      code: null,
+                      code: "go_left",
                       child: Icon(
                         Icons.keyboard_arrow_left,
                         size: 20,
                       ),
                     ),
                     WifiControllerButton(
-                        code: null,
+                        code: "ok",
                         child: Padding(
                           padding: EdgeInsets.all(10),
                           child: Text(
@@ -122,7 +140,7 @@ class WifiRemoteWidget extends StatelessWidget {
                         )),
                     WifiControllerButton(
                       hasBorder: false,
-                      code: null,
+                      code: "go_right",
                       child: Icon(
                         Icons.keyboard_arrow_right,
                         size: 20,
@@ -132,7 +150,7 @@ class WifiRemoteWidget extends StatelessWidget {
                 ),
                 WifiControllerButton(
                   hasBorder: false,
-                  code: null,
+                  code: "go_down",
                   child: Icon(
                     Icons.keyboard_arrow_down_rounded,
                     size: 20,
@@ -142,131 +160,282 @@ class WifiRemoteWidget extends StatelessWidget {
             ),
           ),
 
-          const Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  WifiControllerButton(
-                    code: null,
-                    child: Icon(
-                      Icons.circle,
-                      size: 20,
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(vertical: 10),
-                    child: WifiControllerButton(
-                      code: null,
-                      child: Icon(
-                        Icons.fast_forward,
-                        size: 20,
-                      ),
-                    ),
-                  ),
-                  WifiControllerButton(
-                    code: null,
-                    child: Icon(
-                      Icons.fast_rewind,
-                      size: 20,
-                    ),
-                  ),
-                ],
-              ),
-              WifiControllerButton(
-                code: null,
-                borderRadius: 15,
-                child: Column(
+          SizedBox(
+            height: MediaQuery.of(context).size.height / 4,
+            child: const Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     WifiControllerButton(
-                      hasBorder: false,
-                      code: null,
+                      code: "mute",
                       child: Icon(
-                        Icons.add,
+                        Icons.volume_off_outlined,
                         size: 20,
                       ),
                     ),
                     Padding(
                       padding: EdgeInsets.symmetric(vertical: 10),
-                      child: Text(
-                        "VOL",
+                      child: WifiControllerButton(
+                        code: "fastForward",
+                        child: Icon(
+                          Icons.fast_forward,
+                          size: 20,
+                        ),
                       ),
                     ),
                     WifiControllerButton(
-                      hasBorder: false,
-                      code: null,
+                      code: "rewind",
                       child: Icon(
-                        Icons.remove,
+                        Icons.fast_rewind,
                         size: 20,
                       ),
                     ),
                   ],
                 ),
-              ),
-              WifiControllerButton(
-                code: null,
-                borderRadius: 15,
-                child: Column(
+                WifiControllerButton(
+                  code: null,
+                  borderRadius: 15,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      WifiControllerButton(
+                        hasBorder: false,
+                        code: "volume_up",
+                        child: Icon(
+                          Icons.add,
+                          size: 20,
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(vertical: 10),
+                        child: Text(
+                          "VOL",
+                        ),
+                      ),
+                      WifiControllerButton(
+                        hasBorder: false,
+                        code: "volume_down",
+                        child: Icon(
+                          Icons.remove,
+                          size: 20,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                WifiControllerButton(
+                  code: null,
+                  borderRadius: 15,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      WifiControllerButton(
+                        hasBorder: false,
+                        code: "channel_up",
+                        child: Icon(
+                          Icons.keyboard_arrow_up,
+                          size: 20,
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(vertical: 10),
+                        child: Text(
+                          "CH",
+                        ),
+                      ),
+                      WifiControllerButton(
+                        hasBorder: false,
+                        code: "channel_down",
+                        child: Icon(
+                          Icons.keyboard_arrow_down,
+                          size: 20,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     WifiControllerButton(
-                      hasBorder: false,
-                      code: null,
+                      code: "back",
                       child: Icon(
-                        Icons.keyboard_arrow_up,
+                        Icons.arrow_back,
                         size: 20,
                       ),
                     ),
                     Padding(
                       padding: EdgeInsets.symmetric(vertical: 10),
-                      child: Text(
-                        "CH",
+                      child: WifiControllerButton(
+                        code: "play",
+                        child: Icon(
+                          Icons.play_arrow,
+                          size: 20,
+                        ),
                       ),
                     ),
                     WifiControllerButton(
-                      hasBorder: false,
-                      code: null,
+                      code: "pause",
                       child: Icon(
-                        Icons.keyboard_arrow_down,
+                        Icons.pause,
                         size: 20,
                       ),
                     ),
                   ],
                 ),
-              ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  WifiControllerButton(
-                    code: null,
-                    child: Icon(
-                      Icons.stop,
-                      size: 20,
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(vertical: 10),
-                    child: WifiControllerButton(
-                      code: null,
-                      child: Icon(
-                        Icons.play_arrow,
-                        size: 20,
-                      ),
-                    ),
-                  ),
-                  WifiControllerButton(
-                    code: null,
-                    child: Icon(
-                      Icons.pause,
-                      size: 20,
-                    ),
-                  ),
-                ],
-              ),
-            ],
+              ],
+            ),
           ),
         ],
       ),
+    );
+  }
+
+  void showNumberPadBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+      showDragHandle: true,
+      context: context,
+      builder: (context) =>
+          Column(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const SizedBox(),
+            Padding(
+              padding: const EdgeInsets.only(left: 40.0),
+              child: Center(child: Text("Number", style: getBoldStyle())),
+            ),
+            IconButton(
+                onPressed: () => Navigator.pop(context),
+                icon: const Icon(Icons.close))
+          ],
+        ),
+        Expanded(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  WifiControllerButton(
+                    code: "1",
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: Text(
+                        "1",
+                        style: getBoldStyle(),
+                      ),
+                    ),
+                  ),
+                  WifiControllerButton(
+                    code: "2",
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: Text(
+                        "2",
+                        style: getBoldStyle(),
+                      ),
+                    ),
+                  ),
+                  WifiControllerButton(
+                    code: "3",
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: Text(
+                        "3",
+                        style: getBoldStyle(),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  WifiControllerButton(
+                    code: "4",
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: Text(
+                        "4",
+                        style: getBoldStyle(),
+                      ),
+                    ),
+                  ),
+                  WifiControllerButton(
+                    code: "5",
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: Text(
+                        "5",
+                        style: getBoldStyle(),
+                      ),
+                    ),
+                  ),
+                  WifiControllerButton(
+                    code: "6",
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: Text(
+                        "6",
+                        style: getBoldStyle(),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  WifiControllerButton(
+                    code: "7",
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: Text(
+                        "7",
+                        style: getBoldStyle(),
+                      ),
+                    ),
+                  ),
+                  WifiControllerButton(
+                    code: "8",
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: Text(
+                        "8",
+                        style: getBoldStyle(),
+                      ),
+                    ),
+                  ),
+                  WifiControllerButton(
+                    code: "9",
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: Text(
+                        "9",
+                        style: getBoldStyle(),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              WifiControllerButton(
+                code: "0",
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  child: Text(
+                    "0",
+                    style: getBoldStyle(),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox()
+      ]),
     );
   }
 }

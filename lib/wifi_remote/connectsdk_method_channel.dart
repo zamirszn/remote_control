@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'package:flutter/services.dart';
 import 'package:remote_control/model/connectable_devices.dart';
 
@@ -15,42 +16,77 @@ class ConnectSdkMethodChannel {
     }
   }
 
+  Future<void> onPairingRequired() async {}
 
-  Future<void> onPairingRequired()async{
-    
-  }
+  // Future<List<ConnectableDeviceModel>> getAvailableDevices() async {
+  //   try {
+  //     List<Object?> devices =
+  //         await _channel.invokeMethod('getAvailableDevices');
+
+  //     return [];
+  //   } on PlatformException catch (e) {
+  //     print("Error: ${e.message}");
+  //     return [];
+  //   }
+  // }
 
   Future<List<ConnectableDeviceModel>> getAvailableDevices() async {
     try {
-      final List<dynamic> devices =
+      List<dynamic> devices =
           await _channel.invokeMethod('getAvailableDevices');
 
-      // List<ConnectableDeviceModel> devices = [
-      //   ConnectableDeviceModel(
-      //     friendlyName: "KD-49X88308C",
-      //     id: "9223372036854775807",
-      //     modelName: "BRAVIA 4K 2015",
-      //     ipAddress: "192.168.1.171",
-      //   ),
-      // ];
+      // Create a new list to store the converted devices
+      List<Map<Object?, Object?>> deviceList = [];
 
-      // return devices;
-      return devices
-          .map((device) => ConnectableDeviceModel.fromJson(device))
-          .toList();
+      for (var item in devices) {
+        deviceList.add(item as Map<Object?, Object?>);
+      }
+
+      List<ConnectableDeviceModel> convertMapListToConnectableDeviceList(
+          List<Map<Object?, Object?>> mapList) {
+        List<ConnectableDeviceModel> deviceModelList = [];
+
+        for (var map in mapList) {
+          deviceModelList.add(
+              ConnectableDeviceModel.fromJson(map.cast<String, dynamic>()));
+        }
+
+        return deviceModelList;
+      }
+
+// Usage
+      List<ConnectableDeviceModel> convertedList =
+          convertMapListToConnectableDeviceList(deviceList);
+
+      // Now you can work with the List<Object?> in Dart
+
+      return convertedList;
     } on PlatformException catch (e) {
       print("Error: ${e.message}");
-      return [];
+      // Handle the error as needed
+      return []; // Return an empty list or handle the error in a different way
     }
   }
 
   Future<bool> connectToDevice(String deviceId) async {
     try {
-      bool isConnected = await _channel
+      var isConnected = await _channel
           .invokeMethod('connectToDevice', {'deviceId': deviceId});
       return isConnected;
-    }  catch (e) {
+    } catch (e) {
+      return false;
+    }
+  }
+
+  Future<bool> sendTVCommand({required String command}) async {
+    try {
+      bool isCommandSent = await _channel.invokeMethod('sendTVCommand', {'command': command});
+      return isCommandSent;
+    } catch (e) {
+      print('Error invoking powerOn method: $e');
       return false;
     }
   }
 }
+
+ConnectSdkMethodChannel connectSdkMethodChannel = ConnectSdkMethodChannel();

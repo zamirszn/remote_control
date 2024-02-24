@@ -39,7 +39,7 @@ class _HomeScreenState extends State<HomeScreen> {
           destinations: const [
             NavigationDestination(
                 icon: Icon(Icons.settings_remote), label: "My Remote"),
-            NavigationDestination(icon: Icon(Icons.cast), label: "Cast"),
+            // NavigationDestination(icon: Icon(Icons.cast), label: "Cast"),
             NavigationDestination(
                 icon: Icon(Icons.settings), label: "Settings"),
           ]),
@@ -49,8 +49,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
 List<Widget> homeScreens = [
   const MyRemoteScreen(),
-  Container(
-    child: const Center(child: Text("Cast Screen")),
-  ),
+  // Container(
+  //   child: const Center(child: Text("Cast Screen")),
+  // ),
   const SettingScreen(),
 ];

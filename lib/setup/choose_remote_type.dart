@@ -55,9 +55,6 @@ class ChooseRemoteTypeScreen extends StatelessWidget {
               remoteTypeInformation:
                   "Your device and TV need to be on the same WiFI network",
             ),
-            const SizedBox(
-              height: 20,
-            ),
           ],
         ),
       ),
