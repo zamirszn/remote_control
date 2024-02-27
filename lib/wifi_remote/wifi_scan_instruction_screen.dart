@@ -34,7 +34,7 @@ class _WifiPreScanInstructionScreenState
               const Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text("Searching Device..."),
+                  Text("Searching Devices..."),
                   SizedBox(
                     height: 20,
                   ),
@@ -88,12 +88,15 @@ class _WifiPreScanInstructionScreenState
               ElevatedButton(
                   onPressed: () {
                     // isScanning = true;
-                    // initConnectSdk();
-                    // setState(() {});
+                    //      setState(() {});
 
-                    Navigator.push(context,
-          MaterialPageRoute(builder: (context) => const WifiRemoteScreen()));
-    
+                    showLoadingDialog("Searching for devices", context);
+
+                    Future.delayed(const Duration(seconds: 2))
+                        .then((value) => {initConnectSdk()});
+
+                    //           Navigator.push(context,
+                    // MaterialPageRoute(builder: (context) => const WifiRemoteScreen()));
                   },
                   child: const Text("Ready"))
           ],
@@ -126,20 +129,16 @@ class _WifiPreScanInstructionScreenState
   Timer? timer;
 
   void initConnectSdk() async {
-    isScanning = false;
-    setState(() {});
     await connectSdkMethodChannel.initialize();
 
     await connectSdkMethodChannel.getAvailableDevices().then((value) {
       listofDevices = value;
-
-      setState(() {});
     });
 
-  
-
+    // isScanning = false;
+    Navigator.of(context).pop();
 // periodically scan every 2 seconds
-   timer= Timer.periodic(const Duration(seconds: 2), (timer) async {
+    timer = Timer.periodic(const Duration(seconds: 2), (timer) async {
       await connectSdkMethodChannel.getAvailableDevices().then((value) {
         listofDevices = value;
 
