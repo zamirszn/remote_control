@@ -4,6 +4,17 @@ import 'package:lottie/lottie.dart';
 import 'package:remote_control/data_source/local_data_source/app_prefs.dart';
 import 'package:remote_control/infrared_remote/signal_emmiter.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:vibration/vibration.dart';
+
+
+
+void vibrateOnPress() async {
+  bool? deviceHasVibrator = await Vibration.hasVibrator();
+  if (deviceHasVibrator == true && vibrationValue == true) {
+    Vibration.vibrate(duration: 20);
+  }
+}
+
 
 const String appName = "Remote Control";
 const String edit = "Edit";
@@ -127,7 +138,6 @@ class RemoteLottie extends StatelessWidget {
         // ):
         Lottie.asset(
       "assets/remote_control.json",
-      
     );
   }
 }
@@ -139,7 +149,7 @@ class SuccessLottie extends StatelessWidget {
   Widget build(BuildContext context) {
     return Lottie.asset(
       "assets/success.json",
-      height: 200,
+      height: 150,
     );
   }
 }
@@ -149,7 +159,7 @@ class FailLottie extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Lottie.asset("assets/fail.json", height: 200);
+    return Lottie.asset("assets/fail.json", height: 150);
   }
 }
 

@@ -70,7 +70,7 @@ class WifiRemoteWidget extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const WifiControllerButton(
+              const WifiControllerButtonOld(
                 code: "power_off",
                 child: Icon(
                   Icons.power_settings_new_rounded,
@@ -81,7 +81,7 @@ class WifiRemoteWidget extends StatelessWidget {
                 onTap: () => showNumberPadBottomSheet(context),
                 child: const AbsorbPointer(
                   absorbing: true,
-                  child: WifiControllerButton(
+                  child: WifiControllerButtonOld(
                     code: null,
                     child: Text("123"),
                   ),
@@ -93,8 +93,8 @@ class WifiRemoteWidget extends StatelessWidget {
           const Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              WifiControllerButton(code: "home", child: Text("HOME")),
-              WifiControllerButton(code: "back", child: Text("RETURN")),
+              WifiControllerButtonOld(code: "home", child: Text("HOME")),
+              WifiControllerButtonOld(code: "back", child: Text("RETURN")),
             ],
           ),
           // volume
@@ -110,7 +110,7 @@ class WifiRemoteWidget extends StatelessWidget {
             child: const Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                WifiControllerButton(
+                WifiControllerButtonOld(
                   hasBorder: false,
                   code: "go_up",
                   child: Icon(
@@ -122,7 +122,7 @@ class WifiRemoteWidget extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    WifiControllerButton(
+                    WifiControllerButtonOld(
                       hasBorder: false,
                       code: "go_left",
                       child: Icon(
@@ -130,7 +130,7 @@ class WifiRemoteWidget extends StatelessWidget {
                         size: 20,
                       ),
                     ),
-                    WifiControllerButton(
+                    WifiControllerButtonOld(
                         code: "ok",
                         child: Padding(
                           padding: EdgeInsets.all(10),
@@ -138,7 +138,7 @@ class WifiRemoteWidget extends StatelessWidget {
                             "OK",
                           ),
                         )),
-                    WifiControllerButton(
+                    WifiControllerButtonOld(
                       hasBorder: false,
                       code: "go_right",
                       child: Icon(
@@ -148,7 +148,7 @@ class WifiRemoteWidget extends StatelessWidget {
                     ),
                   ],
                 ),
-                WifiControllerButton(
+                WifiControllerButtonOld(
                   hasBorder: false,
                   code: "go_down",
                   child: Icon(
@@ -168,7 +168,7 @@ class WifiRemoteWidget extends StatelessWidget {
                 Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    WifiControllerButton(
+                    WifiControllerButtonOld(
                       code: "mute",
                       child: Icon(
                         Icons.volume_off_outlined,
@@ -177,7 +177,7 @@ class WifiRemoteWidget extends StatelessWidget {
                     ),
                     Padding(
                       padding: EdgeInsets.symmetric(vertical: 10),
-                      child: WifiControllerButton(
+                      child: WifiControllerButtonOld(
                         code: "fastForward",
                         child: Icon(
                           Icons.fast_forward,
@@ -185,7 +185,7 @@ class WifiRemoteWidget extends StatelessWidget {
                         ),
                       ),
                     ),
-                    WifiControllerButton(
+                    WifiControllerButtonOld(
                       code: "rewind",
                       child: Icon(
                         Icons.fast_rewind,
@@ -194,13 +194,13 @@ class WifiRemoteWidget extends StatelessWidget {
                     ),
                   ],
                 ),
-                WifiControllerButton(
+                WifiControllerButtonOld(
                   code: null,
                   borderRadius: 15,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      WifiControllerButton(
+                      WifiControllerButtonOld(
                         hasBorder: false,
                         code: "volume_up",
                         child: Icon(
@@ -214,7 +214,7 @@ class WifiRemoteWidget extends StatelessWidget {
                           "VOL",
                         ),
                       ),
-                      WifiControllerButton(
+                      WifiControllerButtonOld(
                         hasBorder: false,
                         code: "volume_down",
                         child: Icon(
@@ -225,13 +225,13 @@ class WifiRemoteWidget extends StatelessWidget {
                     ],
                   ),
                 ),
-                WifiControllerButton(
+                WifiControllerButtonOld(
                   code: null,
                   borderRadius: 15,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      WifiControllerButton(
+                      WifiControllerButtonOld(
                         hasBorder: false,
                         code: "channel_up",
                         child: Icon(
@@ -245,7 +245,7 @@ class WifiRemoteWidget extends StatelessWidget {
                           "CH",
                         ),
                       ),
-                      WifiControllerButton(
+                      WifiControllerButtonOld(
                         hasBorder: false,
                         code: "channel_down",
                         child: Icon(
@@ -259,7 +259,7 @@ class WifiRemoteWidget extends StatelessWidget {
                 Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    WifiControllerButton(
+                    WifiControllerButtonOld(
                       code: "back",
                       child: Icon(
                         Icons.arrow_back,
@@ -268,7 +268,7 @@ class WifiRemoteWidget extends StatelessWidget {
                     ),
                     Padding(
                       padding: EdgeInsets.symmetric(vertical: 10),
-                      child: WifiControllerButton(
+                      child: WifiControllerButtonOld(
                         code: "play",
                         child: Icon(
                           Icons.play_arrow,
@@ -276,7 +276,7 @@ class WifiRemoteWidget extends StatelessWidget {
                         ),
                       ),
                     ),
-                    WifiControllerButton(
+                    WifiControllerButtonOld(
                       code: "pause",
                       child: Icon(
                         Icons.pause,
@@ -319,7 +319,7 @@ class WifiRemoteWidget extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  WifiControllerButton(
+                  WifiControllerButtonOld(
                     code: "1",
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -329,7 +329,7 @@ class WifiRemoteWidget extends StatelessWidget {
                       ),
                     ),
                   ),
-                  WifiControllerButton(
+                  WifiControllerButtonOld(
                     code: "2",
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -339,7 +339,7 @@ class WifiRemoteWidget extends StatelessWidget {
                       ),
                     ),
                   ),
-                  WifiControllerButton(
+                  WifiControllerButtonOld(
                     code: "3",
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -354,7 +354,7 @@ class WifiRemoteWidget extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  WifiControllerButton(
+                  WifiControllerButtonOld(
                     code: "4",
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -364,7 +364,7 @@ class WifiRemoteWidget extends StatelessWidget {
                       ),
                     ),
                   ),
-                  WifiControllerButton(
+                  WifiControllerButtonOld(
                     code: "5",
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -374,7 +374,7 @@ class WifiRemoteWidget extends StatelessWidget {
                       ),
                     ),
                   ),
-                  WifiControllerButton(
+                  WifiControllerButtonOld(
                     code: "6",
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -389,7 +389,7 @@ class WifiRemoteWidget extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  WifiControllerButton(
+                  WifiControllerButtonOld(
                     code: "7",
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -399,7 +399,7 @@ class WifiRemoteWidget extends StatelessWidget {
                       ),
                     ),
                   ),
-                  WifiControllerButton(
+                  WifiControllerButtonOld(
                     code: "8",
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -409,7 +409,7 @@ class WifiRemoteWidget extends StatelessWidget {
                       ),
                     ),
                   ),
-                  WifiControllerButton(
+                  WifiControllerButtonOld(
                     code: "9",
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -421,7 +421,7 @@ class WifiRemoteWidget extends StatelessWidget {
                   ),
                 ],
               ),
-              WifiControllerButton(
+              WifiControllerButtonOld(
                 code: "0",
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 10),

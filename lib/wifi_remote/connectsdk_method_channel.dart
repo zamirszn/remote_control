@@ -32,15 +32,22 @@ class ConnectSdkMethodChannel {
 
   Future<List<ConnectableDeviceModel>> getAvailableDevices() async {
     try {
+
       List<dynamic> devices =
           await _channel.invokeMethod('getAvailableDevices');
+
+      print("devices are : $devices");
 
       // Create a new list to store the converted devices
       List<Map<Object?, Object?>> deviceList = [];
 
       for (var item in devices) {
-        deviceList.add(item as Map<Object?, Object?>);
+        Map<Object?, Object?> device = item;
+        print("device item  ${device.runtimeType}");
+        deviceList.add(device);
       }
+
+      print("calling devices List $deviceList");
 
       List<ConnectableDeviceModel> convertMapListToConnectableDeviceList(
           List<Map<Object?, Object?>> mapList) {
@@ -59,7 +66,7 @@ class ConnectSdkMethodChannel {
           convertMapListToConnectableDeviceList(deviceList);
 
       // Now you can work with the List<Object?> in Dart
-
+      print(convertedList.length);
       return convertedList;
     } on PlatformException catch (e) {
       print("Error: ${e.message}");
@@ -80,7 +87,8 @@ class ConnectSdkMethodChannel {
 
   Future<bool> sendTVCommand({required String command}) async {
     try {
-      bool isCommandSent = await _channel.invokeMethod('sendTVCommand', {'command': command});
+      bool isCommandSent =
+          await _channel.invokeMethod('sendTVCommand', {'command': command});
       return isCommandSent;
     } catch (e) {
       print('Error invoking powerOn method: $e');

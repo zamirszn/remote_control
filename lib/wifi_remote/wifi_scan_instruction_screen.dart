@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:remote_control/global.dart';
 import 'package:remote_control/model/connectable_devices.dart';
+import 'package:remote_control/wifi_remote/all_wifi_remote_screen.dart';
 import 'package:remote_control/wifi_remote/connectsdk_method_channel.dart';
 import 'package:remote_control/wifi_remote/wifi_remote_screen.dart';
 
@@ -90,13 +91,15 @@ class _WifiPreScanInstructionScreenState
                     // isScanning = true;
                     //      setState(() {});
 
-                    showLoadingDialog("Searching for devices", context);
+                    // showLoadingDialog("Searching for devices", context);
 
-                    Future.delayed(const Duration(seconds: 2))
-                        .then((value) => {initConnectSdk()});
+                    // Future.delayed(const Duration(seconds: 2))
+                    //     .then((value) => {initConnectSdk()});
 
-                    //           Navigator.push(context,
-                    // MaterialPageRoute(builder: (context) => const WifiRemoteScreen()));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const AllWifiRemoteScreen()));
                   },
                   child: const Text("Ready"))
           ],
@@ -115,8 +118,8 @@ class _WifiPreScanInstructionScreenState
     if (isDevicesConnected) {
       timer?.cancel();
 
-      Navigator.push(context,
-          MaterialPageRoute(builder: (context) => const WifiRemoteScreen()));
+      // Navigator.push(context,
+      //     MaterialPageRoute(builder: (context) => const WifiRemoteScreenOld()));
     }
   }
 
@@ -129,22 +132,19 @@ class _WifiPreScanInstructionScreenState
   Timer? timer;
 
   void initConnectSdk() async {
-    await connectSdkMethodChannel.initialize();
+    await connectSdkMethodChannel.initialize().then((value) => {
+          timer = Timer.periodic(const Duration(seconds: 3), (timer) async {
+            await connectSdkMethodChannel.getAvailableDevices().then((value) {
+              listofDevices = value;
 
-    await connectSdkMethodChannel.getAvailableDevices().then((value) {
-      listofDevices = value;
-    });
+              setState(() {});
+            });
+          })
+        });
 
     // isScanning = false;
     Navigator.of(context).pop();
 // periodically scan every 2 seconds
-    timer = Timer.periodic(const Duration(seconds: 2), (timer) async {
-      await connectSdkMethodChannel.getAvailableDevices().then((value) {
-        listofDevices = value;
-
-        setState(() {});
-      });
-    });
   }
 }
 

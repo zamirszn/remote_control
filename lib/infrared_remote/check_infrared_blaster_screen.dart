@@ -13,21 +13,18 @@ class CheckInfraredBlasterScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
-      body: SingleChildScrollView(
-        child:
-            Column(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
-          const RemoteLottie(),
-          const Text(
-            "Controlling TV via IR requires a built-in infrared blaster, please check it beofre use",
-            textAlign: TextAlign.center,
-          ),
-          ElevatedButton(
-              onPressed: () {
-                checkDeviceIR(context);
-              },
-              child: const Text("Check built-in IR"))
-        ]),
-      ),
+      body: Column(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
+        const RemoteLottie(),
+        const Text(
+          "Controlling TV via IR requires a built-in infrared blaster, please check it beofre use",
+          textAlign: TextAlign.center,
+        ),
+        ElevatedButton(
+            onPressed: () {
+              checkDeviceIR(context);
+            },
+            child: const Text("Check built-in IR"))
+      ]),
     );
   }
 
@@ -44,14 +41,12 @@ class CheckInfraredBlasterScreen extends StatelessWidget {
 
       showModalBottomSheet(
         context: context,
-        builder: (context) =>
-            const SingleChildScrollView(child: InfraredCheckSucessDialog()),
+        builder: (context) => const InfraredCheckSucessDialog(),
       );
     } else {
       showModalBottomSheet(
         context: context,
-        builder: (context) =>
-            const SingleChildScrollView(child: InfraredCheckFailDialog()),
+        builder: (context) => const InfraredCheckFailDialog(),
       );
     }
   }

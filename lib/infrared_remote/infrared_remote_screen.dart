@@ -31,14 +31,14 @@ class InfraredRemoteScreen extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                InfraredControllerButton(
+                InfraredRemoteButton(
                   code: remote.power,
                   child: const Icon(
                     Icons.power_settings_new_rounded,
                     size: 20,
                   ),
                 ),
-                InfraredControllerButton(
+                InfraredRemoteButton(
                   code: remote.info,
                   child: const Icon(
                     Icons.info_outline,
@@ -51,21 +51,21 @@ class InfraredRemoteScreen extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                InfraredControllerButton(
+                InfraredRemoteButton(
                   code: remote.mute,
                   child: const Icon(
                     Icons.volume_off_outlined,
                     size: 20,
                   ),
                 ),
-                const InfraredControllerButton(
+                const InfraredRemoteButton(
                   code: null,
                   child: Icon(
                     Icons.more_horiz_rounded,
                     size: 20,
                   ),
                 ),
-                InfraredControllerButton(
+                InfraredRemoteButton(
                   code: remote.menu,
                   child: const Icon(
                     Icons.list_rounded,
@@ -78,12 +78,12 @@ class InfraredRemoteScreen extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                InfraredControllerButton(
+                InfraredRemoteButton(
                   code: null,
                   borderRadius: 15,
                   child: Column(
                     children: [
-                      InfraredControllerButton(
+                      InfraredRemoteButton(
                         hasBorder: false,
                         code: remote.volumePlus,
                         child: const Icon(
@@ -97,7 +97,7 @@ class InfraredRemoteScreen extends StatelessWidget {
                           "VOL",
                         ),
                       ),
-                      InfraredControllerButton(
+                      InfraredRemoteButton(
                         hasBorder: false,
                         code: remote.volumeMinus,
                         child: const Icon(
@@ -108,19 +108,19 @@ class InfraredRemoteScreen extends StatelessWidget {
                     ],
                   ),
                 ),
-                const InfraredControllerButton(
+                const InfraredRemoteButton(
                   code: null,
                   child: Icon(
                     Icons.home_max_rounded,
                     size: 20,
                   ),
                 ),
-                InfraredControllerButton(
+                InfraredRemoteButton(
                   code: null,
                   borderRadius: 15,
                   child: Column(
                     children: [
-                      InfraredControllerButton(
+                      InfraredRemoteButton(
                         hasBorder: false,
                         code: remote.channelPlus,
                         child: const Icon(
@@ -134,7 +134,7 @@ class InfraredRemoteScreen extends StatelessWidget {
                           "CH",
                         ),
                       ),
-                      InfraredControllerButton(
+                      InfraredRemoteButton(
                         hasBorder: false,
                         code: remote.channelMinus,
                         child: const Icon(
@@ -159,7 +159,7 @@ class InfraredRemoteScreen extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  InfraredControllerButton(
+                  InfraredRemoteButton(
                     hasBorder: false,
                     code: remote.up,
                     child: const Icon(
@@ -171,7 +171,7 @@ class InfraredRemoteScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      InfraredControllerButton(
+                      InfraredRemoteButton(
                         hasBorder: false,
                         code: remote.left,
                         child: const Icon(
@@ -179,7 +179,7 @@ class InfraredRemoteScreen extends StatelessWidget {
                           size: 20,
                         ),
                       ),
-                      InfraredControllerButton(
+                      InfraredRemoteButton(
                           code: remote.enter,
                           child: const Padding(
                             padding: EdgeInsets.all(10),
@@ -187,7 +187,7 @@ class InfraredRemoteScreen extends StatelessWidget {
                               "OK",
                             ),
                           )),
-                      InfraredControllerButton(
+                      InfraredRemoteButton(
                         hasBorder: false,
                         code: remote.left,
                         child: const Icon(
@@ -197,7 +197,7 @@ class InfraredRemoteScreen extends StatelessWidget {
                       ),
                     ],
                   ),
-                  InfraredControllerButton(
+                  InfraredRemoteButton(
                     hasBorder: false,
                     code: remote.down,
                     child: const Icon(
@@ -212,7 +212,7 @@ class InfraredRemoteScreen extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                InfraredControllerButton(
+                InfraredRemoteButton(
                   code: remote.exit,
                   child: const Icon(
                     Icons.keyboard_arrow_left_outlined,
@@ -223,7 +223,7 @@ class InfraredRemoteScreen extends StatelessWidget {
                   onTap: () => showNumberPadBottomSheet(context),
                   child: const AbsorbPointer(
                     absorbing: true,
-                    child: InfraredControllerButton(
+                    child: InfraredRemoteButton(
                       code: null,
                       child: Text(
                         "123",
@@ -265,7 +265,7 @@ class InfraredRemoteScreen extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  InfraredControllerButton(
+                  InfraredRemoteButton(
                     code: remote.one,
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -275,7 +275,7 @@ class InfraredRemoteScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-                  InfraredControllerButton(
+                  InfraredRemoteButton(
                     code: remote.two,
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -285,7 +285,7 @@ class InfraredRemoteScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-                  InfraredControllerButton(
+                  InfraredRemoteButton(
                     code: remote.three,
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -300,7 +300,7 @@ class InfraredRemoteScreen extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  InfraredControllerButton(
+                  InfraredRemoteButton(
                     code: remote.four,
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -310,7 +310,7 @@ class InfraredRemoteScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-                  InfraredControllerButton(
+                  InfraredRemoteButton(
                     code: remote.five,
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -320,7 +320,7 @@ class InfraredRemoteScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-                  InfraredControllerButton(
+                  InfraredRemoteButton(
                     code: remote.six,
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -335,7 +335,7 @@ class InfraredRemoteScreen extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  InfraredControllerButton(
+                  InfraredRemoteButton(
                     code: remote.seven,
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -345,7 +345,7 @@ class InfraredRemoteScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-                  InfraredControllerButton(
+                  InfraredRemoteButton(
                     code: remote.eight,
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -355,7 +355,7 @@ class InfraredRemoteScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-                  InfraredControllerButton(
+                  InfraredRemoteButton(
                     code: remote.nine,
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -367,7 +367,7 @@ class InfraredRemoteScreen extends StatelessWidget {
                   ),
                 ],
               ),
-              InfraredControllerButton(
+              InfraredRemoteButton(
                 code: remote.zero,
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 10),
