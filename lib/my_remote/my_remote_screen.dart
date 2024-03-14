@@ -18,7 +18,16 @@ class MyRemoteScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("TV Remote Control")),
+      appBar: AppBar(title: const Text("TV Remote Control"),
+      // actions: [
+      //   IconButton(onPressed: (){
+      //      Navigator.of(context).push(MaterialPageRoute(
+      //         builder: (context) => const TestScreen(),
+      //       ));
+      //   }, icon: Icon(Icons.bug_report))
+      // ],
+      ),
+      
       floatingActionButton: FloatingActionButton.extended(
           icon: const Icon(Icons.add),
           onPressed: () {

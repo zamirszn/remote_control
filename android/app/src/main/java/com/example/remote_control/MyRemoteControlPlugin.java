@@ -3,11 +3,10 @@ package com.example.remote_control;
 import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
-
 import com.amazon.whisperlink.service.DeviceManager;
 import com.connectsdk.device.ConnectableDevice;
+import com.connectsdk.device.ConnectableDeviceListener;
 import com.connectsdk.device.ConnectableDeviceListener;
 import com.connectsdk.discovery.DiscoveryManager;
 import com.connectsdk.discovery.DiscoveryManager.PairingLevel;
@@ -31,7 +30,6 @@ import com.connectsdk.service.capability.listeners.ResponseListener;
 import com.connectsdk.service.command.ServiceCommandError;
 import com.connectsdk.service.command.ServiceSubscription;
 import io.flutter.embedding.engine.FlutterEngine;
-import io.flutter.embedding.engine.FlutterEngine;
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
@@ -41,10 +39,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import com.connectsdk.device.ConnectableDeviceListener;
 
-public class MyRemoteControlPlugin
-  implements  FlutterPlugin, MethodCallHandler {
+public class MyRemoteControlPlugin implements FlutterPlugin, MethodCallHandler {
 
   private KeyControl keyControl;
 
@@ -87,8 +83,76 @@ public class MyRemoteControlPlugin
 
   private ServiceSubscription<VolumeControl.VolumeListener> mVolumeSubscription;
 
-
   private DiscoveryManager mDiscoveryManager;
+
+  private ConnectableDeviceListener deviceListener = new ConnectableDeviceListener() {
+    @Override
+    public void onPairingRequired(
+      ConnectableDevice device,
+      DeviceService service,
+      PairingType pairingType
+    ) {
+      Log.d("2ndScreenAPP", "Connected to " + mTV.getIpAddress());
+
+      switch (pairingType) {
+        case FIRST_SCREEN:
+          Log.d("2ndScreenAPP", "First Screen");
+
+          break;
+        case PIN_CODE:
+          channel.invokeMethod("onPairingRequired", null);
+          break;
+        case MIXED:
+          Log.d("2ndScreenAPP", "Pin Code");
+
+          break;
+        case NONE:
+        default:
+          break;
+      }
+    }
+
+    @Override
+    public void onConnectionFailed(
+      ConnectableDevice device,
+      ServiceCommandError error
+    ) {
+      Log.d("2ndScreenAPP", "onConnectFailed");
+
+    }
+
+    @Override
+    public void onDeviceReady(ConnectableDevice device) {
+      Log.d("2ndScreenAPP", "onPairingDeviceReady");
+
+      mTV.setPairingType(PairingType.MIXED);
+
+
+
+
+
+      registerSuccess(mTV);
+
+//      channel.invokeMethod("onPairingRequired", null);
+
+
+    }
+
+    @Override
+    public void onDeviceDisconnected(ConnectableDevice device) {
+      Log.d("2ndScreenAPP", "Device Disconnected");
+
+    }
+
+    @Override
+    public void onCapabilityUpdated(
+      ConnectableDevice device,
+      List<String> added,
+      List<String> removed
+    ) {
+      Log.d("2ndScreenAPP", "Device Disconnected");
+    }
+  };
 
   public void attachToEngine(Context context, FlutterEngine flutterEngine) {
     channel =
@@ -111,13 +175,12 @@ public class MyRemoteControlPlugin
   public boolean initialize(Context context) {
     Log.d("MyRemoteControlPlugin", "initialized ");
 
-
     DiscoveryManager.init(context);
     mDiscoveryManager = DiscoveryManager.getInstance();
     mDiscoveryManager.registerDefaultDeviceTypes();
     mDiscoveryManager.setPairingLevel(DiscoveryManager.PairingLevel.ON);
     DiscoveryManager.getInstance().start();
-//    DiscoveryManager.getInstance().addListener(this);
+    //    DiscoveryManager.getInstance().addListener(this);
 
     return true;
   }
@@ -126,12 +189,12 @@ public class MyRemoteControlPlugin
     Log.d("MyRemoteControlPlugin", "pair code");
   }
 
-  public void pairCodeDialog() {}
-
   public void sendDirectionCommand() {}
 
   private VolumeControl.VolumeListener volumeListener = new VolumeControl.VolumeListener() {
-    public void onSuccess(Float volume) {}
+    public void onSuccess(Float volume) {
+      Log.d("MyRemoteControlPlugin", "volume");
+    }
 
     @Override
     public void onError(ServiceCommandError error) {
@@ -177,12 +240,13 @@ public class MyRemoteControlPlugin
           getVolumeControl().subscribeVolume(volumeListener);
 
 
-        if (getTv().hasCapability(VolumeControl.Volume_Get)) {
-          getVolumeControl().getVolume(getVolumeListener);
-        }
 
         if (getTv().hasCapability(VolumeControl.Volume_Subscribe)) {
           getVolumeControl().subscribeVolume(getVolumeListener);
+        }
+
+        if (getTv().hasCapability(VolumeControl.Volume_Get)) {
+          getVolumeControl().getVolume(getVolumeListener);
         }
         getVolumeControl().volumeUp(null);
         break;
@@ -314,6 +378,7 @@ public class MyRemoteControlPlugin
 
         break;
       case "mute":
+        break;
     }
   }
 
@@ -333,9 +398,12 @@ public class MyRemoteControlPlugin
       case "connectToDevice":
         String deviceId = call.argument("deviceId");
 
-        connectToDevice(deviceId);
-        result.success(connectToDevice(deviceId));
 
+        result.success(connectToDevice(deviceId));
+        break;
+      case "sendKey":
+        String key = call.argument("key");
+        result.success(sendPairingKey(key));
         break;
       default:
         throw new IllegalArgumentException("Unknown method " + call.method);
@@ -349,10 +417,16 @@ public class MyRemoteControlPlugin
 
   // Method invoked from Flutter to initialize Connect SDK and start device discovery
 
-
-
-
-
+  public boolean sendPairingKey(String key) {
+    try{
+       mTV.sendPairingKey(key);
+       return true;
+    }catch(Exception e){
+      return false;
+    }
+   
+    
+  }
 
   public boolean connectToDevice(String deviceId) {
     Log.d("MyRemoteControlPlugin", deviceId);
@@ -362,13 +436,18 @@ public class MyRemoteControlPlugin
     Log.d("MyRemoteControlPlugin", "device id " + device);
 
     if (device != null) {
-      device.addListener(deviceListener);
-      device.getListeners().clear();
-      device.setPairingType(DeviceService.PairingType.PIN_CODE); // Set the pairing type if needed
-      device.connect();
-//      this next line is not how to use this but it works so okay
       mTV = device;
-      registerSuccess(mTV);
+      mTV.setPairingType(PairingType.MIXED);
+      mTV.addListener(deviceListener);
+
+
+  // Set the pairing type if needed
+      mTV.connect();
+
+//      mTV.addListener(deviceListener);
+      //      this next line is not how to use this but it works so okay
+//
+//      registerSuccess(mTV);
       return true;
     } else {
       Log.e("MyRemoteControlPlugin", "Device not found with ID: " + deviceId);
@@ -402,98 +481,39 @@ public class MyRemoteControlPlugin
     return devicesList;
   }
 
-
-
-  final private ConnectableDeviceListener deviceListener = new ConnectableDeviceListener() {
-
-    @Override
-    public void onPairingRequired(ConnectableDevice device, DeviceService service, PairingType pairingType) {
-      Log.d("2ndScreenAPP", "Connected to " + mTV.getIpAddress());
-
-      switch (pairingType) {
-        case FIRST_SCREEN:
-          Log.d("2ndScreenAPP", "First Screen");
-
-          break;
-
-        case PIN_CODE:
-        case MIXED:
-          Log.d("2ndScreenAPP", "Pin Code");
-
-          break;
-
-        case NONE:
-        default:
-          break;
-      }
-    }
-
-    @Override
-    public void onCapabilityUpdated(ConnectableDevice device, List<String> added, List<String> removed) {
-
-    }
-
-    @Override
-    public void onConnectionFailed(ConnectableDevice device, ServiceCommandError error) {
-      Log.d("2ndScreenAPP", "onConnectFailed");
-//      connectFailed(mTV);
-    }
-
-    @Override
-    public void onDeviceReady(ConnectableDevice device) {
-      Log.d("2ndScreenAPP", "onPairingSuccess");
-
-      registerSuccess(mTV);
-    }
-
-    @Override
-    public void onDeviceDisconnected(ConnectableDevice device) {
-      Log.d("2ndScreenAPP", "Device Disconnected");
-
-    }
-
-  };
-
-
-  public void registerSuccess(ConnectableDevice tv)
-  {
+  public void registerSuccess(ConnectableDevice tv) {
     mTV = tv;
 
     if (tv == null) {
-//      launcher = null;
-//      mediaPlayer = null;
+      //      launcher = null;
+      //      mediaPlayer = null;
       mediaControl = null;
       tvControl = null;
       volumeControl = null;
-//      toastControl = null;
-//      textInputControl = null;
-//      mouseControl = null;
-//      externalInputControl = null;
+      //      toastControl = null;
+      //      textInputControl = null;
+      //      mouseControl = null;
+      //      externalInputControl = null;
       powerControl = null;
       keyControl = null;
-//      webAppLauncher = null;
+      //      webAppLauncher = null;
 
-//      disableButtons();
-    }
-    else {
-//      launcher = mTv.getCapability(Launcher.class);
-//      mediaPlayer = mTv.getCapability(MediaPlayer.class);
+      //      disableButtons();
+    } else {
+      //      launcher = mTv.getCapability(Launcher.class);
+      //      mediaPlayer = mTv.getCapability(MediaPlayer.class);
       mediaControl = mTV.getCapability(MediaControl.class);
       tvControl = mTV.getCapability(TVControl.class);
       volumeControl = mTV.getCapability(VolumeControl.class);
-//      toastControl = mTv.getCapability(ToastControl.class);
-//      textInputControl = mTv.getCapability(TextInputControl.class);
-//      mouseControl = mTv.getCapability(MouseControl.class);
-//      externalInputControl = mTv.getCapability(ExternalInputControl.class);
+      //      toastControl = mTv.getCapability(ToastControl.class);
+      //      textInputControl = mTv.getCapability(TextInputControl.class);
+      //      mouseControl = mTv.getCapability(MouseControl.class);
+      //      externalInputControl = mTv.getCapability(ExternalInputControl.class);
       powerControl = mTV.getCapability(PowerControl.class);
       keyControl = mTV.getCapability(KeyControl.class);
-//      webAppLauncher = mTv.getCapability(WebAppLauncher.class);
+      //      webAppLauncher = mTv.getCapability(WebAppLauncher.class);
 
-//      enableButtons();
+      //      enableButtons();
     }
   }
-
-
 }
-
-

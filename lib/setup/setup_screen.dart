@@ -15,15 +15,15 @@ class SetupScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text(appName),
         centerTitle: true,
-        actions: [
-          IconButton(
-              onPressed: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => const TestScreen(),
-                ));
-              },
-              icon: const Icon(Icons.bug_report))
-        ],
+        // actions: [
+        //   IconButton(
+        //       onPressed: () {
+        //         Navigator.of(context).push(MaterialPageRoute(
+        //           builder: (context) => const TestScreen(),
+        //         ));
+        //       },
+        //       icon: const Icon(Icons.bug_report))
+        // ],
       ),
       body: Center(
         child: Column(

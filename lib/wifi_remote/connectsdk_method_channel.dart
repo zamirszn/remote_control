@@ -1,7 +1,9 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:remote_control/model/connectable_devices.dart';
+import 'package:remote_control/wifi_remote/pairing_code_bottom_sheet.dart';
 
 class ConnectSdkMethodChannel {
   static const MethodChannel _channel =
@@ -16,23 +18,27 @@ class ConnectSdkMethodChannel {
     }
   }
 
-  Future<void> onPairingRequired() async {}
+  Future<bool> sendPairingKey(String key) async {
+    try {
+      bool isKeySent = await _channel.invokeMethod("sendKey", {"key": key});
+      return isKeySent;
+    } catch (e) {
+      return false;
+    }
+  }
 
-  // Future<List<ConnectableDeviceModel>> getAvailableDevices() async {
-  //   try {
-  //     List<Object?> devices =
-  //         await _channel.invokeMethod('getAvailableDevices');
-
-  //     return [];
-  //   } on PlatformException catch (e) {
-  //     print("Error: ${e.message}");
-  //     return [];
-  //   }
-  // }
+  Future onPairingRequired(BuildContext context) async {
+    try {
+      _channel.setMethodCallHandler((call) async {
+        if (call.method == "onPairingRequired") {
+          pairingCodeBrandBottomSheet(context);
+        }
+      });
+    } catch (e) {}
+  }
 
   Future<List<ConnectableDeviceModel>> getAvailableDevices() async {
     try {
-
       List<dynamic> devices =
           await _channel.invokeMethod('getAvailableDevices');
 
@@ -79,6 +85,8 @@ class ConnectSdkMethodChannel {
     try {
       var isConnected = await _channel
           .invokeMethod('connectToDevice', {'deviceId': deviceId});
+
+      print("devices is connected $isConnected");
       return isConnected;
     } catch (e) {
       return false;

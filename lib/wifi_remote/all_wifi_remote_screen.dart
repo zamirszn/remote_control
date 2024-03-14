@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:remote_control/wifi_remote/roku/roku_search_screen.dart';
 import 'package:remote_control/wifi_remote/roku/roku_wifi_remote.dart';
+import 'package:remote_control/wifi_remote/samsung/samsung_search_screen.dart';
 import 'package:remote_control/wifi_remote/samsung/samsung_wifi_remote.dart';
+import 'package:remote_control/wifi_remote/all_wifi_remote/universal_remote_search_screen.dart';
 
 class AllWifiRemoteScreen extends StatelessWidget {
   const AllWifiRemoteScreen({super.key});
@@ -15,12 +18,16 @@ class AllWifiRemoteScreen extends StatelessWidget {
         children: [
           WifiRemoteListTile(
             remoteName: "Samsung",
-            remoteScreen: SamsungWifiRemote(),
+            remoteScreen: SamsungSearchScreen(),
           ),
           WifiRemoteListTile(
             remoteName: "Roku",
-            remoteScreen: RokuWifiRemote(),
-          )
+            remoteScreen: RokuSearchScreen(),
+          ),
+          WifiRemoteListTile(
+            remoteName: "Universal",
+            remoteScreen: UniversalRemoteSearchScreen(),
+          ),
         ],
       ),
     );

@@ -6,21 +6,10 @@ import 'package:remote_control/global.dart';
 import 'package:remote_control/model/connectable_devices.dart';
 import 'package:remote_control/wifi_remote/all_wifi_remote_screen.dart';
 import 'package:remote_control/wifi_remote/connectsdk_method_channel.dart';
-import 'package:remote_control/wifi_remote/wifi_remote_screen.dart';
+import 'package:remote_control/wifi_remote/all_wifi_remote/universal_remote_screen.dart';
 
-class WifiPreScanInstructionScreen extends StatefulWidget {
+class WifiPreScanInstructionScreen extends StatelessWidget {
   const WifiPreScanInstructionScreen({super.key});
-
-  @override
-  State<WifiPreScanInstructionScreen> createState() =>
-      _WifiPreScanInstructionScreenState();
-}
-
-class _WifiPreScanInstructionScreenState
-    extends State<WifiPreScanInstructionScreen> {
-  bool isScanning = false;
-
-  List<ConnectableDeviceModel> listofDevices = [];
 
   @override
   Widget build(BuildContext context) {
@@ -30,121 +19,34 @@ class _WifiPreScanInstructionScreenState
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            if (listofDevices.isEmpty) const RemoteLottie(),
-            if (isScanning == true)
-              const Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text("Searching Devices..."),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  CupertinoActivityIndicator(
-                    radius: 15,
-                  )
-                ],
-              ),
-            if (listofDevices.isNotEmpty)
-              const Column(
-                children: [
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Text("Found Devices"),
-                ],
-              ),
-            if (listofDevices.isNotEmpty)
-              SizedBox(
-                height: MediaQuery.of(context).size.height / 1.15,
-                child: ListView.builder(
-                  physics: const BouncingScrollPhysics(),
-                  shrinkWrap: true,
-                  itemCount: listofDevices.length,
-                  itemBuilder: (context, index) {
-                    ConnectableDeviceModel connectableDevice =
-                        listofDevices[index];
-                    return ListTile(
-                      leading: const Icon(Icons.tv),
-                      onTap: () {
-                        if (connectableDevice.ipAddress != null) {
-                          connectToDevice(connectableDevice.ipAddress!);
-                        }
-                      },
-                      title: Text(
-                          "${connectableDevice.modelName ?? ""} - ${connectableDevice.friendlyName ?? ""} "),
-                      subtitle: Text(connectableDevice.ipAddress ?? ""),
-                    );
-                  },
-                ),
-              ),
+            const RemoteLottie(),
             const SizedBox(
               height: 20,
             ),
-            if (isScanning == false && listofDevices.isEmpty)
-              const WifiInstructionWidget(),
+            const WifiInstructionWidget(),
             const SizedBox(
               height: 20,
             ),
-            if (isScanning == false && listofDevices.isEmpty)
-              ElevatedButton(
-                  onPressed: () {
-                    // isScanning = true;
-                    //      setState(() {});
+            ElevatedButton(
+                onPressed: () {
+                  // isScanning = true;
+                  //      setState(() {});
 
-                    // showLoadingDialog("Searching for devices", context);
+                  // showLoadingDialog("Searching for devices", context);
 
-                    // Future.delayed(const Duration(seconds: 2))
-                    //     .then((value) => {initConnectSdk()});
+                  // Future.delayed(const Duration(seconds: 2))
+                  //     .then((value) => {initConnectSdk()});
 
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const AllWifiRemoteScreen()));
-                  },
-                  child: const Text("Ready"))
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const AllWifiRemoteScreen()));
+                },
+                child: const Text("Ready"))
           ],
         ),
       ),
     );
-  }
-
-  void connectToDevice(String deviceId) async {
-    showLoadingDialog("Connecting please wait", context);
-    bool isDevicesConnected =
-        await connectSdkMethodChannel.connectToDevice(deviceId);
-
-    Navigator.pop(context);
-
-    if (isDevicesConnected) {
-      timer?.cancel();
-
-      // Navigator.push(context,
-      //     MaterialPageRoute(builder: (context) => const WifiRemoteScreenOld()));
-    }
-  }
-
-  @override
-  void dispose() {
-    timer?.cancel();
-    super.dispose();
-  }
-
-  Timer? timer;
-
-  void initConnectSdk() async {
-    await connectSdkMethodChannel.initialize().then((value) => {
-          timer = Timer.periodic(const Duration(seconds: 3), (timer) async {
-            await connectSdkMethodChannel.getAvailableDevices().then((value) {
-              listofDevices = value;
-
-              setState(() {});
-            });
-          })
-        });
-
-    // isScanning = false;
-    Navigator.of(context).pop();
-// periodically scan every 2 seconds
   }
 }
 

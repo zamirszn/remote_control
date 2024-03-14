@@ -3,8 +3,8 @@ import 'package:remote_control/global.dart';
 import 'package:remote_control/model/remote_model.dart';
 import 'package:remote_control/remote_button.dart';
 
-class WifiRemoteScreen extends StatelessWidget {
-  const WifiRemoteScreen({super.key});
+class UniversalRemoteScreen extends StatelessWidget {
+  const UniversalRemoteScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

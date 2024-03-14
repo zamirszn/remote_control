@@ -4,47 +4,14 @@ import 'package:remote_control/model/samsung_tv_model.dart';
 import 'package:remote_control/remote_button.dart';
 import 'package:remote_control/wifi_remote/samsung/samsung_key_code.dart';
 
-class SamsungWifiRemote extends StatefulWidget {
-  const SamsungWifiRemote({super.key});
-
-  @override
-  State<SamsungWifiRemote> createState() => _SamsungWifiRemoteState();
-}
-
-class _SamsungWifiRemoteState extends State<SamsungWifiRemote> {
-  @override
-  void initState() {
-    super.initState();
-
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      connectTV();
-    });
-  }
-
-  SamsungTVModel? tv;
-  String? token;
-
-  void connectTV() async {
-    showLoadingDialog("Connecting to TV", context);
-    try {
-      discoverAndConnect();
-    } catch (e) {
-      // close dialog
-      Navigator.pop(context);
-      // exit remote screen
-      Navigator.pop(context);
-      showErrorDialog(e.toString(), context);
-    }
-  }
-
-  void discoverAndConnect() async {
-    tv = await SamsungTVModel.discover();
-    await tv?.connect();
-    token = tv?.token;
-  }
+class SamsungWifiRemote extends StatelessWidget {
+  const SamsungWifiRemote({super.key, required this.tv});
+  final SamsungTVModel tv;
 
   @override
   Widget build(BuildContext context) {
+    
+
     return Scaffold(
         appBar: AppBar(title: const Text("Samsung Remote")),
         body: Container(
@@ -63,7 +30,7 @@ class _SamsungWifiRemoteState extends State<SamsungWifiRemote> {
                 children: [
                   WifiRemoteButton(
                     onPressed: () async {
-                      await tv?.sendKey(samsungKeyCodes.KEY_POWER);
+                      await tv.sendKey(samsungKeyCodes.KEY_POWER);
                     },
                     child: const Icon(
                       Icons.power_settings_new_rounded,
@@ -88,13 +55,13 @@ class _SamsungWifiRemoteState extends State<SamsungWifiRemote> {
                 children: [
                   WifiRemoteButton(
                     onPressed: () async {
-                      await tv?.sendKey(samsungKeyCodes.KEY_HOME);
+                      await tv.sendKey(samsungKeyCodes.KEY_HOME);
                     },
                     child: const Text("HOME"),
                   ),
                   WifiRemoteButton(
                     onPressed: () async {
-                      await tv?.sendKey(samsungKeyCodes.KEY_RETURN);
+                      await tv.sendKey(samsungKeyCodes.KEY_RETURN);
                     },
                     child: const Text("RETURN"),
                   ),
@@ -118,7 +85,7 @@ class _SamsungWifiRemoteState extends State<SamsungWifiRemote> {
                     WifiRemoteButton(
                       hasBorder: false,
                       onPressed: () async {
-                        await tv?.sendKey(samsungKeyCodes.KEY_UP);
+                        await tv.sendKey(samsungKeyCodes.KEY_UP);
                       },
                       child: const Icon(
                         Icons.keyboard_arrow_up_rounded,
@@ -132,7 +99,7 @@ class _SamsungWifiRemoteState extends State<SamsungWifiRemote> {
                         WifiRemoteButton(
                           hasBorder: false,
                           onPressed: () async {
-                            await tv?.sendKey(samsungKeyCodes.KEY_LEFT);
+                            await tv.sendKey(samsungKeyCodes.KEY_LEFT);
                           },
                           child: const Icon(
                             Icons.keyboard_arrow_left,
@@ -141,7 +108,7 @@ class _SamsungWifiRemoteState extends State<SamsungWifiRemote> {
                         ),
                         WifiRemoteButton(
                             onPressed: () async {
-                              await tv?.sendKey(samsungKeyCodes.KEY_ENTER);
+                              await tv.sendKey(samsungKeyCodes.KEY_ENTER);
                             },
                             child: const Padding(
                               padding: EdgeInsets.all(10),
@@ -152,7 +119,7 @@ class _SamsungWifiRemoteState extends State<SamsungWifiRemote> {
                         WifiRemoteButton(
                           hasBorder: false,
                           onPressed: () async {
-                            await tv?.sendKey(samsungKeyCodes.KEY_RIGHT);
+                            await tv.sendKey(samsungKeyCodes.KEY_RIGHT);
                           },
                           child: const Icon(
                             Icons.keyboard_arrow_right,
@@ -164,7 +131,7 @@ class _SamsungWifiRemoteState extends State<SamsungWifiRemote> {
                     WifiRemoteButton(
                       hasBorder: false,
                       onPressed: () async {
-                        await tv?.sendKey(samsungKeyCodes.KEY_DOWN);
+                        await tv.sendKey(samsungKeyCodes.KEY_DOWN);
                       },
                       child: const Icon(
                         Icons.keyboard_arrow_down_rounded,
@@ -185,7 +152,7 @@ class _SamsungWifiRemoteState extends State<SamsungWifiRemote> {
                       children: [
                         WifiRemoteButton(
                           onPressed: () async {
-                            await tv?.sendKey(samsungKeyCodes.KEY_MUTE);
+                            await tv.sendKey(samsungKeyCodes.KEY_MUTE);
                           },
                           child: const Icon(
                             Icons.volume_off_outlined,
@@ -196,7 +163,7 @@ class _SamsungWifiRemoteState extends State<SamsungWifiRemote> {
                           padding: const EdgeInsets.symmetric(vertical: 10),
                           child: WifiRemoteButton(
                             onPressed: () async {
-                              await tv?.sendKey(samsungKeyCodes.KEY_FF);
+                              await tv.sendKey(samsungKeyCodes.KEY_FF);
                             },
                             child: const Icon(
                               Icons.fast_forward,
@@ -206,7 +173,7 @@ class _SamsungWifiRemoteState extends State<SamsungWifiRemote> {
                         ),
                         WifiRemoteButton(
                           onPressed: () async {
-                            await tv?.sendKey(samsungKeyCodes.KEY_REWIND);
+                            await tv.sendKey(samsungKeyCodes.KEY_REWIND);
                           },
                           child: const Icon(
                             Icons.fast_rewind,
@@ -224,7 +191,7 @@ class _SamsungWifiRemoteState extends State<SamsungWifiRemote> {
                           WifiRemoteButton(
                             hasBorder: false,
                             onPressed: () async {
-                              await tv?.sendKey(samsungKeyCodes.KEY_VOLUP);
+                              await tv.sendKey(samsungKeyCodes.KEY_VOLUP);
                             },
                             child: const Icon(
                               Icons.add,
@@ -240,7 +207,7 @@ class _SamsungWifiRemoteState extends State<SamsungWifiRemote> {
                           WifiRemoteButton(
                             hasBorder: false,
                             onPressed: () async {
-                              await tv?.sendKey(samsungKeyCodes.KEY_VOLDOWN);
+                              await tv.sendKey(samsungKeyCodes.KEY_VOLDOWN);
                             },
                             child: const Icon(
                               Icons.remove,
@@ -259,7 +226,7 @@ class _SamsungWifiRemoteState extends State<SamsungWifiRemote> {
                           WifiRemoteButton(
                             hasBorder: false,
                             onPressed: () async {
-                              await tv?.sendKey(samsungKeyCodes.KEY_CHUP);
+                              await tv.sendKey(samsungKeyCodes.KEY_CHUP);
                             },
                             child: const Icon(
                               Icons.keyboard_arrow_up,
@@ -275,7 +242,7 @@ class _SamsungWifiRemoteState extends State<SamsungWifiRemote> {
                           WifiRemoteButton(
                             hasBorder: false,
                             onPressed: () async {
-                              await tv?.sendKey(samsungKeyCodes.KEY_CHDOWN);
+                              await tv.sendKey(samsungKeyCodes.KEY_CHDOWN);
                             },
                             child: const Icon(
                               Icons.keyboard_arrow_down,
@@ -290,7 +257,7 @@ class _SamsungWifiRemoteState extends State<SamsungWifiRemote> {
                       children: [
                         WifiRemoteButton(
                           onPressed: () async {
-                            await tv?.sendKey(samsungKeyCodes.KEY_INFO);
+                            await tv.sendKey(samsungKeyCodes.KEY_INFO);
                           },
                           child: const Icon(
                             Icons.info_outline,
@@ -301,7 +268,7 @@ class _SamsungWifiRemoteState extends State<SamsungWifiRemote> {
                           padding: const EdgeInsets.symmetric(vertical: 10),
                           child: WifiRemoteButton(
                             onPressed: () async {
-                              await tv?.sendKey(samsungKeyCodes.KEY_PLAY);
+                              await tv.sendKey(samsungKeyCodes.KEY_PLAY);
                             },
                             child: const Icon(
                               Icons.play_arrow,
@@ -311,7 +278,7 @@ class _SamsungWifiRemoteState extends State<SamsungWifiRemote> {
                         ),
                         WifiRemoteButton(
                           onPressed: () async {
-                            await tv?.sendKey(samsungKeyCodes.KEY_PAUSE);
+                            await tv.sendKey(samsungKeyCodes.KEY_PAUSE);
                           },
                           child: const Icon(
                             Icons.pause,
@@ -356,7 +323,7 @@ class _SamsungWifiRemoteState extends State<SamsungWifiRemote> {
                 children: [
                   WifiRemoteButton(
                     onPressed: () async {
-                      await tv?.sendKey(samsungKeyCodes.KEY_1);
+                      await tv.sendKey(samsungKeyCodes.KEY_1);
                     },
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -368,7 +335,7 @@ class _SamsungWifiRemoteState extends State<SamsungWifiRemote> {
                   ),
                   WifiRemoteButton(
                     onPressed: () async {
-                      await tv?.sendKey(samsungKeyCodes.KEY_2);
+                      await tv.sendKey(samsungKeyCodes.KEY_2);
                     },
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -380,7 +347,7 @@ class _SamsungWifiRemoteState extends State<SamsungWifiRemote> {
                   ),
                   WifiRemoteButton(
                     onPressed: () async {
-                      await tv?.sendKey(samsungKeyCodes.KEY_3);
+                      await tv.sendKey(samsungKeyCodes.KEY_3);
                     },
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -397,7 +364,7 @@ class _SamsungWifiRemoteState extends State<SamsungWifiRemote> {
                 children: [
                   WifiRemoteButton(
                     onPressed: () async {
-                      await tv?.sendKey(samsungKeyCodes.KEY_4);
+                      await tv.sendKey(samsungKeyCodes.KEY_4);
                     },
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -409,7 +376,7 @@ class _SamsungWifiRemoteState extends State<SamsungWifiRemote> {
                   ),
                   WifiRemoteButton(
                     onPressed: () async {
-                      await tv?.sendKey(samsungKeyCodes.KEY_5);
+                      await tv.sendKey(samsungKeyCodes.KEY_5);
                     },
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -421,7 +388,7 @@ class _SamsungWifiRemoteState extends State<SamsungWifiRemote> {
                   ),
                   WifiRemoteButton(
                     onPressed: () async {
-                      await tv?.sendKey(samsungKeyCodes.KEY_6);
+                      await tv.sendKey(samsungKeyCodes.KEY_6);
                     },
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -438,7 +405,7 @@ class _SamsungWifiRemoteState extends State<SamsungWifiRemote> {
                 children: [
                   WifiRemoteButton(
                     onPressed: () async {
-                      await tv?.sendKey(samsungKeyCodes.KEY_7);
+                      await tv.sendKey(samsungKeyCodes.KEY_7);
                     },
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -450,7 +417,7 @@ class _SamsungWifiRemoteState extends State<SamsungWifiRemote> {
                   ),
                   WifiRemoteButton(
                     onPressed: () async {
-                      await tv?.sendKey(samsungKeyCodes.KEY_8);
+                      await tv.sendKey(samsungKeyCodes.KEY_8);
                     },
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -462,7 +429,7 @@ class _SamsungWifiRemoteState extends State<SamsungWifiRemote> {
                   ),
                   WifiRemoteButton(
                     onPressed: () async {
-                      await tv?.sendKey(samsungKeyCodes.KEY_9);
+                      await tv.sendKey(samsungKeyCodes.KEY_9);
                     },
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -476,7 +443,7 @@ class _SamsungWifiRemoteState extends State<SamsungWifiRemote> {
               ),
               WifiRemoteButton(
                 onPressed: () async {
-                  await tv?.sendKey(samsungKeyCodes.KEY_0);
+                  await tv.sendKey(samsungKeyCodes.KEY_0);
                 },
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 10),

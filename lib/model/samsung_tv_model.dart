@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:http/http.dart' as http;
+import 'package:http/http.dart';
 import 'package:remote_control/global.dart';
 import 'package:remote_control/wifi_remote/samsung/samsung_key_code.dart';
 import 'package:upnp2/upnp.dart';
@@ -48,7 +49,7 @@ class SamsungTVModel {
     // }
 
     // get device info
-    info = await getDeviceInfo();
+    Response info = await getDeviceInfo();
 
     // establish socket connection
     final appNameBase64 = base64.encode(utf8.encode(appName));
@@ -142,52 +143,63 @@ class SamsungTVModel {
 
   //static method to discover Samsung Smart TVs in the network using the UPNP protocol
 
-  static discover() async {
-    var completer = Completer();
+  Future discover(Function(List<SamsungTVModel?> tvs) callback) async {
+    // var completer = Completer();
 
     final client = DeviceDiscoverer();
     final List<SamsungTVModel?> tvs = [];
 
     await client.start(ipv6: false);
 
-    client.quickDiscoverClients().listen((client) async {
-      RegExp re = RegExp(r'^.*?Samsung.+UPnP.+SDK\/1\.0$');
+    client.quickDiscoverClients().listen((
+      client,
+    ) async {
+      // RegExp re = RegExp(r'^.*?Samsung.+UPnP.+SDK\/1\.0$');
 
-      //ignore other devices
-      if (!re.hasMatch(client.server!)) {
-        return;
-      }
-      try {
-        final device = await client.getDevice();
+      // //ignore other devices
+      // if (!re.hasMatch(client.server!)) {
+      //   return;
+      // }
+      // try {
+      final device = await client.getDevice();
 
-        Uri location = Uri.parse(client.location!);
+      Uri location = Uri.parse(client.location!);
 
-        final deviceExists = tvs.firstWhere((tv) => tv?.host == location.host,
+      SamsungTVModel? deviceExists;
+
+      if (tvs.isNotEmpty) {
+        deviceExists = tvs.firstWhere((tv) => tv?.host == location.host,
             orElse: () => null);
+      }
 
-        if (deviceExists == null) {
-          print("Found ${device?.friendlyName} on IP ${location.host}");
-          final tv = SamsungTVModel(host: location.host);
-          tv.addService({
-            "location": client.location,
-            "server": client.server,
-            "st": client.st,
-            "usn": client.usn
-          });
-          tvs.add(tv);
-        }
-      } catch (e, stack) {
-        print("ERROR: $e - ${client.location}");
-        print(stack);
+      if (deviceExists == null) {
+        print("Found ${device?.friendlyName} on IP ${location.host}");
+        final tv = SamsungTVModel(host: location.host);
+        tv.addService({
+          "location": client.location,
+          "server": client.server,
+          "st": client.st,
+          "usn": client.usn
+        });
+        tvs.add(tv);
+        callback(tvs);
       }
-    }).onDone(() {
+      // } catch (e, stack) {
+      //   print("ERROR: $e - ${client.location}");
+      //   print(stack);
+    }
+        // }
+
+        ).onDone(() {
       if (tvs.isEmpty) {
-        completer.completeError(
-            "No Samsung TVs found. Make sure the UPNP protocol is enabled in your network.");
+        return;
+        // completer.completeError(
+        //     "No Samsung TVs found. Make sure the UPNP protocol is enabled in your network.");
       }
-      completer.complete(tvs.first);
+      // completer.complete(tvs.first);
     });
 
-    return completer.future;
+    // return completer.future;
+    // callback(tvs);
   }
 }

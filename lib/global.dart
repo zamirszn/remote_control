@@ -6,15 +6,12 @@ import 'package:remote_control/infrared_remote/signal_emmiter.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:vibration/vibration.dart';
 
-
-
 void vibrateOnPress() async {
   bool? deviceHasVibrator = await Vibration.hasVibrator();
   if (deviceHasVibrator == true && vibrationValue == true) {
     Vibration.vibrate(duration: 20);
   }
 }
-
 
 const String appName = "Remote Control";
 const String edit = "Edit";
@@ -207,7 +204,11 @@ Future<void> showLoadingDialog(String message, context) async {
           ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 30),
-            child: Center(child: Text(message)),
+            child: Center(
+                child: Text(
+              message,
+              textAlign: TextAlign.center,
+            )),
           ),
         ],
       );
